@@ -53,6 +53,162 @@ button {
   border: none;
   outline: none;
 }
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.route-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.surface {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.center {
+  text-align: center;
+}
+.muted {
+  color: rgb(59 42 32 / 0.72);
+}
+.section-title {
+  text-align: center;
+  margin: 2rem 0 1.5rem;
+  color: var(--text-dark);
+}
+.inline-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.field-note {
+  font-size: 0.9rem;
+  color: #8b7355;
+}
+.w-full {
+  width: 100%;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.grid {
+  display: grid;
+}
+.grid-1 {
+  grid-template-columns: 1fr;
+}
+.gap-1 {
+  gap: 0.75rem;
+}
+.gap-2 {
+  gap: 1rem;
+}
+.gap-3 {
+  gap: 1.5rem;
+}
+.rounded-lg {
+  border-radius: 12px;
+}
+.rounded-xl {
+  border-radius: 16px;
+}
+.shadow-soft {
+  box-shadow: 0 4px 15px var(--shadow);
+}
+.nutrition-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.nutrition-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+}
+.nutrition-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-dark);
+  opacity: 0.88;
+}
+.nutrition-grid,
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+.nutrition-card,
+.food-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 15px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+.nutrition-media,
+.food-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgb(196 154 108 / 0.08);
+}
+.nutrition-media img,
+.food-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nutrition-title,
+.food-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.nutrition-copy,
+.food-benefit {
+  font-size: 0.95rem;
+  color: rgb(59 42 32 / 0.82);
+  line-height: 1.6;
+}
+.water-glass {
+  font-size: 2.5rem;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+#waterGlasses {
+  min-height: 60px;
+}
+.quote-container.is-changing {
+  opacity: 0.72;
+  transform: translateY(4px);
+}
+.goal-reached,
+.goal-achieved {
+  box-shadow: 0 0 0 1px rgb(196 154 108 / 0.18), 0 0 0 10px rgb(196 154 108 / 0.08);
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -110,10 +266,10 @@ button {
 @keyframes goalPulse {
   0%,
   100% {
-    box-shadow: 0 4px 15px var(--shadow);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 0 10px rgb(196 154 108 / 0.12);
+    transform: scale(1.015);
   }
 }
 @keyframes quoteFadeOut {
@@ -312,8 +468,8 @@ button[type="submit"]:focus-visible {
 }
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1.5rem, 2vw, 2rem);
   margin-bottom: 2rem;
 }
 .dashboard-card {
@@ -383,7 +539,12 @@ button[type="submit"]:focus-visible {
 .step-counter-card,
 .about-card {
   content-visibility: auto;
-  contain-intrinsic-size: 1px 420px;
+  contain-intrinsic-size: 360px 420px;
+}
+
+.nutrition-card,
+.food-card {
+  contain-intrinsic-size: 320px 520px;
 }
 
 
@@ -404,6 +565,8 @@ button[type="submit"]:focus-visible {
   margin: 0 auto 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 14px rgb(90 62 43 / 0.12);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 .about-card .about-section {
@@ -619,6 +782,7 @@ button[type="submit"] {
 }
 body.modal-open {
   overflow: hidden;
+  padding-right: var(--scrollbar-compensation, 0px);
 }
 .name-modal-overlay {
   position: fixed;
@@ -798,33 +962,6 @@ body.modal-open {
   background: linear-gradient(135deg, var(--accent-color), #8b7355);
   color: #fff;
 }
-.food-card {
-  background-color: var(--card-bg);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px var(--shadow);
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-.food-image {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-  border-radius: 12px;
-  margin: 0 auto 1rem;
-}
-.food-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 0.5rem;
-}
-.food-description {
-  font-size: 0.95rem;
-  color: var(--text-dark);
-  opacity: 0.8;
-  line-height: 1.6;
-}
 .profile-card {
   background-color: var(--card-bg);
   border-radius: 20px;
@@ -950,6 +1087,7 @@ body.modal-open {
   font-weight: 600;
   line-height: 1.6;
   margin-bottom: 1rem;
+  min-height: 4.8em;
   transition:
     opacity var(--motion-medium) ease,
     transform var(--motion-medium) ease;
@@ -1212,9 +1350,6 @@ body.dark .navbar-greeting {
   }
 }
 @media (min-width: 481px) and (max-width: 768px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .progress-container {
     width: 240px;
     height: 240px;
@@ -1243,10 +1378,6 @@ body.dark .navbar-greeting {
   .nav-links a {
     font-size: 1rem;
     padding: 0.7rem 1.2rem;
-  }
-  .dashboard-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
   }
   .container {
     padding: 3rem 2rem;
@@ -1285,6 +1416,16 @@ body.dark .navbar-greeting {
   }
   .weekly-grid {
     grid-template-columns: repeat(7, 1fr);
+  }
+}
+@media (min-width: 600px) {
+  .nutrition-intro {
+    font-size: 1.05rem;
+  }
+}
+@media (min-width: 1024px) {
+  .nutrition-heading {
+    font-size: 2.1rem;
   }
 }
 .text-center {

@@ -1,6 +1,6 @@
 # FitTrack
 
-FitTrack is a lightweight fitness web app for tracking daily movement and habits. It includes a step counter, water tracker, weekly summaries, progress views, motivational quotes, profile settings, and a simple dashboard for quick stats.
+FitTrack is a lightweight fitness web app for tracking daily movement and habits. It now uses a single routed entry point, a shared navigation/header shell, and centralized app state for steps, water, profile, and settings.
 
 ## Features
 
@@ -14,19 +14,21 @@ FitTrack is a lightweight fitness web app for tracking daily movement and habits
 - Service worker support for offline caching
 - Gulp-based build pipeline for minifying and optimizing assets
 
-## Pages
+## Navigation
 
-- `index.html` - home dashboard
-- `steps.html` - step counter
-- `weekly.html` - weekly summary
-- `water.html` - water tracker
-- `quotes.html` - motivational quotes
-- `nutrition.html` - nutrition page
-- `profile.html` - profile page
-- `progress.html` - progress overview
-- `distance.html` - distance tracker
-- `settings.html` - app settings
-- `about.html` - app overview
+The app now renders from `index.html` and uses hash routes for:
+
+- `#home`
+- `#steps`
+- `#weekly`
+- `#water`
+- `#quotes`
+- `#nutrition`
+- `#profile`
+- `#progress`
+- `#distance`
+- `#settings`
+- `#about`
 
 ## Requirements
 
@@ -58,7 +60,7 @@ Create an optimized production build in `dist`:
 npm run build
 ```
 
-The build process minifies HTML, CSS, and JavaScript, and optimizes images.
+The build process minifies the SPA entry, CSS, JavaScript modules, service worker, and optimizes images.
 
 ## Step Tracking Note
 
@@ -66,8 +68,10 @@ The step counter uses device motion sensors. On iOS, the browser may ask for mot
 
 ## Project Structure
 
-- `*.html` - app pages
-- `*.js` - page scripts and shared behavior
+- `index.html` - single routed app shell
+- `app.js` - shared app state, templates, and section behavior
+- `router.js` - hash router for navigation
+- `theme.js` - saved theme bootstrap and toggle helper
 - `style.css` - global styling
 - `images/` - image assets
 - `gulpfile.js` - build tasks

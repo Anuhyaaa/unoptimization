@@ -1,104 +1,103 @@
-const CACHE_NAME = 'steps-count-cache-v2';
-const urlsToCache = [
+const CACHE_NAME = 'fittrack-cache-v4';
+const IMAGE_BASE_NAMES = [
+  'about-fitness',
+  'almonds',
+  'avocado',
+  'banana',
+  'brown-rice',
+  'chicken',
+  'eggs',
+  'greek-yogurt',
+  'oats',
+  'salmon',
+  'spinach'
+];
+
+const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/index-backup.html',
+  '/app.html',
+  '/about.html',
+  '/distance.html',
+  '/nutrition.html',
+  '/profile.html',
+  '/progress.html',
+  '/quotes.html',
+  '/settings.html',
+  '/steps.html',
+  '/test-name-feature.html',
+  '/water.html',
+  '/weekly.html',
   '/style.css',
-  '/script.js',
-  '/index.js',
+  '/app.js',
+  '/router.js',
   '/theme.js',
   '/user-name.js',
-  '/router.js',
-  '/steps.html',
+  '/index.js',
   '/steps.js',
-  '/water.html',
-  '/water.js',
-  '/distance.html',
-  '/distance.js',
-  '/weekly.html',
   '/weekly.js',
-  '/progress.html',
-  '/progress.js',
-  '/quotes.html',
+  '/water.js',
   '/quotes.js',
-  '/settings.html',
-  '/settings.js',
-  '/profile.html',
   '/profile.js',
-  '/about.html',
-  '/nutrition.html',
-  '/app.html'
+  '/progress.js',
+  '/settings.js',
+  '/distance.js',
+  ...IMAGE_BASE_NAMES.flatMap((name) => [`/images/${name}.webp`, `/images/${name}.jpg`])
 ];
+
+async function cacheStaticAssets() {
+  const cache = await caches.open(CACHE_NAME);
+  await cache.addAll(STATIC_ASSETS);
+}
+
+async function cacheFirst(request) {
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  const networkResponse = await fetch(request);
+  if (networkResponse && networkResponse.ok) {
+    const cache = await caches.open(CACHE_NAME);
+    cache.put(request, networkResponse.clone());
+  }
+
+  return networkResponse;
+}
+
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => {
-        console.log('Service Worker: Installed successfully');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('Service Worker: Cache failed', error);
-      })
+    cacheStaticAssets().then(() => self.skipWaiting())
   );
 });
+
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
-  
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-
-            if (cacheName !== CACHE_NAME) {
-              console.log('Service Worker: Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-      .then(() => {
-        console.log('Service Worker: Activated successfully');
-        return self.clients.claim();
-      })
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.map((key) => (key === CACHE_NAME ? undefined : caches.delete(key)))))
+      .then(() => self.clients.claim())
   );
 });
 
+function isNavigationRequest(request) {
+  return request.mode === 'navigate' || (request.method === 'GET' && request.headers.get('accept')?.includes('text/html'));
+}
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
+  const { request } = event;
 
-        if (response) {
-          console.log('Service Worker: Serving from cache:', event.request.url);
-          return response;
-        }
+  if (request.method !== 'GET') {
+    return;
+  }
 
-        console.log('Service Worker: Fetching from network:', event.request.url);
-        return fetch(event.request)
-          .then((response) => {
+  if (isNavigationRequest(request)) {
+    event.respondWith(
+      cacheFirst(request).catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
 
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            const responseToCache = response.clone();
-            
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          });
-      })
-      .catch((error) => {
-        console.error('Service Worker: Fetch failed', error);
-      })
-  );
+  event.respondWith(cacheFirst(request));
 });

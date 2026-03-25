@@ -1,2 +1,31 @@
-(function(){const savedTheme=localStorage.getItem("fitTrackTheme");if(savedTheme==="dark"){document.documentElement.classList.add("dark");document.body.classList.add("dark")}})();function toggleThemeGlobal(){document.body.classList.toggle("dark");const isDark=document.body.classList.contains("dark");localStorage.setItem("fitTrackTheme",isDark?"dark":"light");return isDark}
-const FitTrackStorage={get:function(key,defaultValue=null){try{const item=localStorage.getItem(key);return item!==null?item:defaultValue}catch(e){console.warn('localStorage access failed:',e);return defaultValue}},set:function(key,value){try{localStorage.setItem(key,value);return!0}catch(e){console.warn('localStorage write failed:',e);return!1}},getJSON:function(key,defaultValue={}){try{const item=localStorage.getItem(key);return item?JSON.parse(item):defaultValue}catch(e){console.warn('localStorage JSON parse failed:',e);return defaultValue}},setJSON:function(key,value){try{localStorage.setItem(key,JSON.stringify(value));return!0}catch(e){console.warn('localStorage JSON write failed:',e);return!1}}};function batchDOMUpdates(updates){requestAnimationFrame(()=>{updates.forEach(update=>update())})}
+(function () {
+  function readTheme() {
+    try {
+      return localStorage.getItem('fitTrackTheme') === 'dark' ? 'dark' : 'light';
+    } catch (error) {
+      return 'light';
+    }
+  }
+
+  function applyTheme(theme) {
+    const isDark = theme === 'dark';
+    document.documentElement.classList.toggle('dark', isDark);
+    document.body.classList.toggle('dark', isDark);
+    return isDark;
+  }
+
+  applyTheme(readTheme());
+
+  window.toggleThemeGlobal = function toggleThemeGlobal() {
+    const isDark = !document.body.classList.contains('dark');
+    applyTheme(isDark ? 'dark' : 'light');
+
+    try {
+      localStorage.setItem('fitTrackTheme', isDark ? 'dark' : 'light');
+    } catch (error) {
+      console.warn('Unable to save theme preference:', error);
+    }
+
+    return isDark;
+  };
+})();
