@@ -43,7 +43,7 @@ const STATIC_ASSETS = [
   '/progress.js',
   '/settings.js',
   '/distance.js',
-  ...IMAGE_BASE_NAMES.flatMap((name) => [`/images/${name}.webp`, `/images/${name}.jpg`])
+  ...IMAGE_BASE_NAMES.map((name) => `/images/${name}.webp`)
 ];
 
 async function cacheStaticAssets() {

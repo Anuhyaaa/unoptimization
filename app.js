@@ -64,70 +64,60 @@
     {
       name: 'Oats',
       imageWebp: 'images/oats.webp',
-      imageJpg: 'images/oats.jpg',
       alt: 'Bowl of nutritious oats',
       benefit: 'Provides long-lasting energy.'
     },
     {
       name: 'Eggs',
       imageWebp: 'images/eggs.webp',
-      imageJpg: 'images/eggs.jpg',
       alt: 'Fresh eggs for protein',
       benefit: 'High-quality protein for muscle building.'
     },
     {
       name: 'Banana',
       imageWebp: 'images/banana.webp',
-      imageJpg: 'images/banana.jpg',
       alt: 'Yellow bananas rich in potassium',
       benefit: 'Quick energy and potassium source.'
     },
     {
       name: 'Chicken Breast',
       imageWebp: 'images/chicken.webp',
-      imageJpg: 'images/chicken.jpg',
       alt: 'Grilled chicken breast',
       benefit: 'Lean protein for muscle recovery.'
     },
     {
       name: 'Brown Rice',
       imageWebp: 'images/brown-rice.webp',
-      imageJpg: 'images/brown-rice.jpg',
       alt: 'Bowl of brown rice',
       benefit: 'Healthy carbs for sustained energy.'
     },
     {
       name: 'Almonds',
       imageWebp: 'images/almonds.webp',
-      imageJpg: 'images/almonds.jpg',
       alt: 'Almonds with healthy fats',
       benefit: 'Healthy fats and vitamins.'
     },
     {
       name: 'Greek Yogurt',
       imageWebp: 'images/greek-yogurt.webp',
-      imageJpg: 'images/greek-yogurt.jpg',
       alt: 'Greek yogurt in a bowl',
       benefit: 'High protein and gut-friendly.'
     },
     {
       name: 'Spinach',
       imageWebp: 'images/spinach.webp',
-      imageJpg: 'images/spinach.jpg',
       alt: 'Fresh green spinach leaves',
       benefit: 'Rich in iron and antioxidants.'
     },
     {
       name: 'Salmon',
       imageWebp: 'images/salmon.webp',
-      imageJpg: 'images/salmon.jpg',
       alt: 'Fresh salmon fillet',
       benefit: 'Omega-3 for heart health.'
     },
     {
       name: 'Avocado',
       imageWebp: 'images/avocado.webp',
-      imageJpg: 'images/avocado.jpg',
       alt: 'Sliced avocado',
       benefit: 'Healthy fats for overall wellness.'
     }
@@ -1386,7 +1376,7 @@
             <article class='nutrition-card food-card'>
               <picture class='nutrition-media food-img'>
                 <source type='image/webp' srcset='${food.imageWebp}'>
-                <img src='${food.imageJpg}' srcset='${food.imageJpg}' sizes='(max-width: 599px) 100vw, (max-width: 1023px) 50vw, (max-width: 1439px) 33vw, 25vw' alt='${escapeAttribute(food.alt || food.name)}' loading='lazy' decoding='async'>
+                <img src='${food.imageWebp}' alt='${escapeAttribute(food.alt || food.name)}' loading='lazy' decoding='async'>
               </picture>
               <h3 class='nutrition-title food-name'>${food.name}</h3>
               <p class='nutrition-copy food-benefit'>${food.benefit}</p>
