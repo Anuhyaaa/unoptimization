@@ -1,6 +1,6 @@
 # FitTrack
 
-FitTrack is a lightweight fitness web app for tracking daily movement and habits. It now uses a single routed entry point, a shared navigation/header shell, and centralized app state for steps, water, profile, and settings.
+FitTrack is a lightweight fitness web app for tracking daily movement and habits.
 
 ## Features
 
@@ -11,56 +11,30 @@ FitTrack is a lightweight fitness web app for tracking daily movement and habits
 - Daily motivation quotes
 - Nutrition and profile pages
 - Theme and app settings
-- Service worker support for offline caching
-- Gulp-based build pipeline for minifying and optimizing assets
+- Simple static pages with shared styling
 
 ## Navigation
 
-The app now renders from `index.html` and uses hash routes for:
+The site includes these pages:
 
-- `#home`
-- `#steps`
-- `#weekly`
-- `#water`
-- `#quotes`
-- `#nutrition`
-- `#profile`
-- `#progress`
-- `#distance`
-- `#settings`
-- `#about`
+- `Home`
+- `Steps`
+- `Weekly`
+- `Water`
+- `Quotes`
+- `Nutrition`
+- `Profile`
+- `Progress`
+- `Distance`
+- `Settings`
+- `About`
 
 ## Requirements
 
-- Node.js and npm
 - A modern browser
 - Mobile device permissions for step tracking features
 
-## Installation
-
-```bash
-npm install
-```
-
-## Run Locally
-
-Start the development server with BrowserSync:
-
-```bash
-npm start
-```
-
-Then open the local server shown in the terminal, usually `http://localhost:3000`.
-
-## Build
-
-Create an optimized production build in `dist`:
-
-```bash
-npm run build
-```
-
-The build process minifies the SPA entry, CSS, JavaScript modules, service worker, and optimizes images.
+Open `index.html` directly in a browser to run the site.
 
 ## Step Tracking Note
 
@@ -68,14 +42,22 @@ The step counter uses device motion sensors. On iOS, the browser may ask for mot
 
 ## Project Structure
 
-- `index.html` - single routed app shell
-- `app.js` - shared app state, templates, and section behavior
-- `router.js` - hash router for navigation
-- `theme.js` - saved theme bootstrap and toggle helper
+- `index.html` - home page
+- `steps.html` - step counter page
+- `weekly.html` - weekly summary
+- `water.html` - water tracker
+- `quotes.html` - daily quotes
+- `nutrition.html` - nutrition guide
+- `profile.html` - profile page
+- `progress.html` - progress page
+- `distance.html` - distance page
+- `settings.html` - settings page
+- `about.html` - about page
+- `app.js` - shared app behavior
+- `router.js` - page navigation helper
+- `theme.js` - theme bootstrap and toggle helper
 - `style.css` - global styling
 - `images/` - image assets
-- `gulpfile.js` - build tasks
-- `service-worker.js` - offline support
 
 ## License
 

@@ -1,36 +1,48 @@
 (function () {
-  'use strict';
+  "use strict";
 
-  const ROUTES = ['home', 'steps', 'weekly', 'water', 'quotes', 'nutrition', 'profile', 'progress', 'distance', 'settings', 'about'];
+  const ROUTES = [
+    "home",
+    "steps",
+    "weekly",
+    "water",
+    "quotes",
+    "nutrition",
+    "profile",
+    "progress",
+    "distance",
+    "settings",
+    "about",
+  ];
   const NAV_ITEMS = [
-    ['home', 'Home'],
-    ['steps', 'Steps'],
-    ['weekly', 'Weekly'],
-    ['water', 'Water'],
-    ['quotes', 'Quotes'],
-    ['nutrition', 'Nutrition'],
-    ['profile', 'Profile'],
-    ['progress', 'Progress'],
-    ['distance', 'Distance'],
-    ['settings', 'Settings'],
-    ['about', 'About']
+    ["home", "Home"],
+    ["steps", "Steps"],
+    ["weekly", "Weekly"],
+    ["water", "Water"],
+    ["quotes", "Quotes"],
+    ["nutrition", "Nutrition"],
+    ["profile", "Profile"],
+    ["progress", "Progress"],
+    ["distance", "Distance"],
+    ["settings", "Settings"],
+    ["about", "About"],
   ];
 
   const STORAGE_KEYS = {
-    username: 'fittrack_username',
-    legacyUsername: 'fittrackUserName',
-    theme: 'fitTrackTheme',
-    notifications: 'fitTrackNotifications',
-    sound: 'fitTrackSound',
-    steps: 'fitTrackSteps',
-    stepsDistance: 'fitTrackDistance',
-    stepsDate: 'fitTrackDate',
-    weekly: 'fitTrackWeekly',
-    water: 'fitTrackWater',
-    waterDate: 'fitTrackWaterDate',
-    quoteDate: 'fitTrackQuoteDate',
-    quoteIndex: 'fitTrackQuoteIndex',
-    weight: 'fitTrackWeight'
+    username: "fittrack_username",
+    legacyUsername: "fittrackUserName",
+    theme: "fitTrackTheme",
+    notifications: "fitTrackNotifications",
+    sound: "fitTrackSound",
+    steps: "fitTrackSteps",
+    stepsDistance: "fitTrackDistance",
+    stepsDate: "fitTrackDate",
+    weekly: "fitTrackWeekly",
+    water: "fitTrackWater",
+    waterDate: "fitTrackWaterDate",
+    quoteDate: "fitTrackQuoteDate",
+    quoteIndex: "fitTrackQuoteIndex",
+    weight: "fitTrackWeight",
   };
 
   const STEP_GOAL = 10000;
@@ -40,96 +52,134 @@
   const STEP_UPPER_THRESHOLD = 11.6;
   const STEP_LOWER_THRESHOLD = 10.2;
   const STEP_COOLDOWN = 350;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   const quotes = [
-    { text: 'The only bad workout is the one that did not happen.', author: 'Unknown' },
-    { text: 'Take care of your body. It is the only place you have to live.', author: 'Jim Rohn' },
-    { text: 'Fitness is not about being better than someone else. It is about being better than you used to be.', author: 'Khloe Kardashian' },
-    { text: 'The groundwork for all happiness is good health.', author: 'Leigh Hunt' },
-    { text: 'Your body can stand almost anything. It is your mind that you have to convince.', author: 'Unknown' },
-    { text: 'Success is not always about greatness. It is about consistency.', author: 'Dwayne Johnson' },
-    { text: 'The only way to finish is to start.', author: 'Unknown' },
-    { text: 'Do not wish for a good body, work for it.', author: 'Unknown' },
-    { text: 'Sweat is fat crying.', author: 'Unknown' },
-    { text: 'You do not have to be extreme, just consistent.', author: 'Unknown' },
-    { text: 'A one hour workout is 4% of your day. No excuses.', author: 'Unknown' },
-    { text: 'Exercise is a celebration of what your body can do, not a punishment for what you ate.', author: 'Unknown' },
-    { text: 'The pain you feel today will be the strength you feel tomorrow.', author: 'Unknown' },
-    { text: 'Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.', author: 'Christian D. Larson' },
-    { text: 'Fitness is not a destination, it is a way of life.', author: 'Unknown' }
+    {
+      text: "The only bad workout is the one that did not happen.",
+      author: "Unknown",
+    },
+    {
+      text: "Take care of your body. It is the only place you have to live.",
+      author: "Jim Rohn",
+    },
+    {
+      text: "Fitness is not about being better than someone else. It is about being better than you used to be.",
+      author: "Khloe Kardashian",
+    },
+    {
+      text: "The groundwork for all happiness is good health.",
+      author: "Leigh Hunt",
+    },
+    {
+      text: "Your body can stand almost anything. It is your mind that you have to convince.",
+      author: "Unknown",
+    },
+    {
+      text: "Success is not always about greatness. It is about consistency.",
+      author: "Dwayne Johnson",
+    },
+    { text: "The only way to finish is to start.", author: "Unknown" },
+    { text: "Do not wish for a good body, work for it.", author: "Unknown" },
+    { text: "Sweat is fat crying.", author: "Unknown" },
+    {
+      text: "You do not have to be extreme, just consistent.",
+      author: "Unknown",
+    },
+    {
+      text: "A one hour workout is 4% of your day. No excuses.",
+      author: "Unknown",
+    },
+    {
+      text: "Exercise is a celebration of what your body can do, not a punishment for what you ate.",
+      author: "Unknown",
+    },
+    {
+      text: "The pain you feel today will be the strength you feel tomorrow.",
+      author: "Unknown",
+    },
+    {
+      text: "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.",
+      author: "Christian D. Larson",
+    },
+    {
+      text: "Fitness is not a destination, it is a way of life.",
+      author: "Unknown",
+    },
   ];
 
   const foods = [
     {
-      name: 'Oats',
-      imageWebp: 'images/oats.webp',
-      alt: 'Bowl of nutritious oats',
-      benefit: 'Provides long-lasting energy.'
+      name: "Oats",
+      imageWebp: "images/oats.webp",
+      alt: "Bowl of nutritious oats",
+      benefit: "Provides long-lasting energy.",
     },
     {
-      name: 'Eggs',
-      imageWebp: 'images/eggs.webp',
-      alt: 'Fresh eggs for protein',
-      benefit: 'High-quality protein for muscle building.'
+      name: "Eggs",
+      imageWebp: "images/eggs.webp",
+      alt: "Fresh eggs for protein",
+      benefit: "High-quality protein for muscle building.",
     },
     {
-      name: 'Banana',
-      imageWebp: 'images/banana.webp',
-      alt: 'Yellow bananas rich in potassium',
-      benefit: 'Quick energy and potassium source.'
+      name: "Banana",
+      imageWebp: "images/banana.webp",
+      alt: "Yellow bananas rich in potassium",
+      benefit: "Quick energy and potassium source.",
     },
     {
-      name: 'Chicken Breast',
-      imageWebp: 'images/chicken.webp',
-      alt: 'Grilled chicken breast',
-      benefit: 'Lean protein for muscle recovery.'
+      name: "Chicken Breast",
+      imageWebp: "images/chicken.webp",
+      alt: "Grilled chicken breast",
+      benefit: "Lean protein for muscle recovery.",
     },
     {
-      name: 'Brown Rice',
-      imageWebp: 'images/brown-rice.webp',
-      alt: 'Bowl of brown rice',
-      benefit: 'Healthy carbs for sustained energy.'
+      name: "Brown Rice",
+      imageWebp: "images/brown-rice.webp",
+      alt: "Bowl of brown rice",
+      benefit: "Healthy carbs for sustained energy.",
     },
     {
-      name: 'Almonds',
-      imageWebp: 'images/almonds.webp',
-      alt: 'Almonds with healthy fats',
-      benefit: 'Healthy fats and vitamins.'
+      name: "Almonds",
+      imageWebp: "images/almonds.webp",
+      alt: "Almonds with healthy fats",
+      benefit: "Healthy fats and vitamins.",
     },
     {
-      name: 'Greek Yogurt',
-      imageWebp: 'images/greek-yogurt.webp',
-      alt: 'Greek yogurt in a bowl',
-      benefit: 'High protein and gut-friendly.'
+      name: "Greek Yogurt",
+      imageWebp: "images/greek-yogurt.webp",
+      alt: "Greek yogurt in a bowl",
+      benefit: "High protein and gut-friendly.",
     },
     {
-      name: 'Spinach',
-      imageWebp: 'images/spinach.webp',
-      alt: 'Fresh green spinach leaves',
-      benefit: 'Rich in iron and antioxidants.'
+      name: "Spinach",
+      imageWebp: "images/spinach.webp",
+      alt: "Fresh green spinach leaves",
+      benefit: "Rich in iron and antioxidants.",
     },
     {
-      name: 'Salmon',
-      imageWebp: 'images/salmon.webp',
-      alt: 'Fresh salmon fillet',
-      benefit: 'Omega-3 for heart health.'
+      name: "Salmon",
+      imageWebp: "images/salmon.webp",
+      alt: "Fresh salmon fillet",
+      benefit: "Omega-3 for heart health.",
     },
     {
-      name: 'Avocado',
-      imageWebp: 'images/avocado.webp',
-      alt: 'Sliced avocado',
-      benefit: 'Healthy fats for overall wellness.'
-    }
+      name: "Avocado",
+      imageWebp: "images/avocado.webp",
+      alt: "Sliced avocado",
+      benefit: "Healthy fats for overall wellness.",
+    },
   ];
 
   const Storage = {
-    get(key, fallback = '') {
+    get(key, fallback = "") {
       try {
         const value = localStorage.getItem(key);
         return value === null ? fallback : value;
       } catch (error) {
-        console.warn('localStorage read failed:', error);
+        console.warn("localStorage read failed:", error);
         return fallback;
       }
     },
@@ -138,7 +188,7 @@
         localStorage.setItem(key, value);
         return true;
       } catch (error) {
-        console.warn('localStorage write failed:', error);
+        console.warn("localStorage write failed:", error);
         return false;
       }
     },
@@ -147,7 +197,7 @@
         const value = localStorage.getItem(key);
         return value ? JSON.parse(value) : fallback;
       } catch (error) {
-        console.warn('localStorage JSON read failed:', error);
+        console.warn("localStorage JSON read failed:", error);
         return fallback;
       }
     },
@@ -156,51 +206,56 @@
         localStorage.setItem(key, JSON.stringify(value));
         return true;
       } catch (error) {
-        console.warn('localStorage JSON write failed:', error);
+        console.warn("localStorage JSON write failed:", error);
         return false;
       }
-    }
+    },
   };
 
   const State = {
     get username() {
-      return Storage.get(STORAGE_KEYS.username, Storage.get(STORAGE_KEYS.legacyUsername, ''));
+      return Storage.get(
+        STORAGE_KEYS.username,
+        Storage.get(STORAGE_KEYS.legacyUsername, ""),
+      );
     },
     set username(value) {
       Storage.set(STORAGE_KEYS.username, String(value));
     },
     get theme() {
-      return Storage.get(STORAGE_KEYS.theme, 'light');
+      return Storage.get(STORAGE_KEYS.theme, "light");
     },
     set theme(value) {
-      Storage.set(STORAGE_KEYS.theme, value === 'dark' ? 'dark' : 'light');
+      Storage.set(STORAGE_KEYS.theme, value === "dark" ? "dark" : "light");
     },
     get notifications() {
-      return Storage.get(STORAGE_KEYS.notifications, 'on');
+      return Storage.get(STORAGE_KEYS.notifications, "on");
     },
     set notifications(value) {
-      Storage.set(STORAGE_KEYS.notifications, value === 'off' ? 'off' : 'on');
+      Storage.set(STORAGE_KEYS.notifications, value === "off" ? "off" : "on");
     },
     get sound() {
-      return Storage.get(STORAGE_KEYS.sound, 'on');
+      return Storage.get(STORAGE_KEYS.sound, "on");
     },
     set sound(value) {
-      Storage.set(STORAGE_KEYS.sound, value === 'off' ? 'off' : 'on');
+      Storage.set(STORAGE_KEYS.sound, value === "off" ? "off" : "on");
     },
     get steps() {
-      return Number.parseInt(Storage.get(STORAGE_KEYS.steps, '0'), 10) || 0;
+      return Number.parseInt(Storage.get(STORAGE_KEYS.steps, "0"), 10) || 0;
     },
     set steps(value) {
       Storage.set(STORAGE_KEYS.steps, String(Math.max(0, Number(value) || 0)));
     },
     get stepDistance() {
-      return Number.parseFloat(Storage.get(STORAGE_KEYS.stepsDistance, '0')) || 0;
+      return (
+        Number.parseFloat(Storage.get(STORAGE_KEYS.stepsDistance, "0")) || 0
+      );
     },
     set stepDistance(value) {
       Storage.set(STORAGE_KEYS.stepsDistance, Number(value).toFixed(2));
     },
     get stepDate() {
-      return Storage.get(STORAGE_KEYS.stepsDate, '');
+      return Storage.get(STORAGE_KEYS.stepsDate, "");
     },
     set stepDate(value) {
       Storage.set(STORAGE_KEYS.stepsDate, String(value));
@@ -212,35 +267,40 @@
       Storage.setJSON(STORAGE_KEYS.weekly, value || {});
     },
     get water() {
-      return Number.parseInt(Storage.get(STORAGE_KEYS.water, '0'), 10) || 0;
+      return Number.parseInt(Storage.get(STORAGE_KEYS.water, "0"), 10) || 0;
     },
     set water(value) {
       Storage.set(STORAGE_KEYS.water, String(Math.max(0, Number(value) || 0)));
     },
     get waterDate() {
-      return Storage.get(STORAGE_KEYS.waterDate, '');
+      return Storage.get(STORAGE_KEYS.waterDate, "");
     },
     set waterDate(value) {
       Storage.set(STORAGE_KEYS.waterDate, String(value));
     },
     get weight() {
-      return Storage.get(STORAGE_KEYS.weight, '');
+      return Storage.get(STORAGE_KEYS.weight, "");
     },
     set weight(value) {
       Storage.set(STORAGE_KEYS.weight, String(value));
     },
     get quoteDate() {
-      return Storage.get(STORAGE_KEYS.quoteDate, '');
+      return Storage.get(STORAGE_KEYS.quoteDate, "");
     },
     set quoteDate(value) {
       Storage.set(STORAGE_KEYS.quoteDate, String(value));
     },
     get quoteIndex() {
-      return Number.parseInt(Storage.get(STORAGE_KEYS.quoteIndex, '0'), 10) || 0;
+      return (
+        Number.parseInt(Storage.get(STORAGE_KEYS.quoteIndex, "0"), 10) || 0
+      );
     },
     set quoteIndex(value) {
-      Storage.set(STORAGE_KEYS.quoteIndex, String(Math.max(0, Number(value) || 0)));
-    }
+      Storage.set(
+        STORAGE_KEYS.quoteIndex,
+        String(Math.max(0, Number(value) || 0)),
+      );
+    },
   };
 
   State.update = function update(partialState = {}) {
@@ -253,22 +313,16 @@
     return State;
   };
 
-  function scheduleFrame(callback) {
-    return window.requestAnimationFrame(() => {
-      callback();
-    });
-  }
-
   function todayKey(date = new Date()) {
     return date.toDateString();
   }
 
   function currentDateLabel() {
-    return new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date().toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   }
 
@@ -280,16 +334,18 @@
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    return [hours, minutes, seconds].map((part) => String(part).padStart(2, '0')).join(':');
+    return [hours, minutes, seconds]
+      .map((part) => String(part).padStart(2, "0"))
+      .join(":");
   }
 
   function escapeAttribute(value) {
-    return String(value || '')
-      .replaceAll('&', '&amp;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;');
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
 
   function ensureDailyStepReset() {
@@ -317,7 +373,9 @@
     const weeklyData = State.weekly;
     weeklyData[dateString] = Number(steps) || 0;
 
-    const dates = Object.keys(weeklyData).sort((left, right) => new Date(right) - new Date(left));
+    const dates = Object.keys(weeklyData).sort(
+      (left, right) => new Date(right) - new Date(left),
+    );
     if (dates.length > 30) {
       dates.slice(30).forEach((date) => {
         delete weeklyData[date];
@@ -360,7 +418,7 @@
     return {
       steps: State.steps,
       water: State.water,
-      streak: getStreak()
+      streak: getStreak(),
     };
   }
 
@@ -384,10 +442,10 @@
 
   function navMarkup(activeRoute) {
     const links = NAV_ITEMS.map(([route, label]) => {
-      const active = route === activeRoute ? ' active' : '';
-      const current = route === activeRoute ? ' aria-current=\'page\'' : '';
+      const active = route === activeRoute ? " active" : "";
+      const current = route === activeRoute ? " aria-current='page'" : "";
       return `<li><a href='#${route}' class='nav-link${active}' data-nav='${route}'${current}>${label}</a></li>`;
-    }).join('');
+    }).join("");
 
     return `
       <nav class='navbar'>
@@ -426,23 +484,27 @@
   function homeContent() {
     const summary = getDashboardSummary();
     const username = State.username;
-    const welcome = username ? `Welcome back, ${username} 👋` : 'Welcome to FitTrack 👋';
+    const welcome = username
+      ? `Welcome back, ${username} 👋`
+      : "Welcome to FitTrack 👋";
     const quickLinks = [
-      ['steps', '📱', 'Step Counter', 'Track your steps in real-time'],
-      ['weekly', '📊', 'Weekly Summary', 'View your weekly progress'],
-      ['water', '🚰', 'Water Tracker', 'Stay hydrated daily'],
-      ['quotes', '💪', 'Daily Motivation', 'Get inspired every day'],
-      ['distance', '📍', 'Distance Tracker', 'Track your walking distance'],
-      ['progress', '📈', 'Progress Overview', 'See your achievements']
+      ["steps", "📱", "Step Counter", "Track your steps in real-time"],
+      ["weekly", "📊", "Weekly Summary", "View your weekly progress"],
+      ["water", "🚰", "Water Tracker", "Stay hydrated daily"],
+      ["quotes", "💪", "Daily Motivation", "Get inspired every day"],
+      ["distance", "📍", "Distance Tracker", "Track your walking distance"],
+      ["progress", "📈", "Progress Overview", "See your achievements"],
     ]
-      .map(([route, icon, cardTitle, label]) => `
+      .map(
+        ([route, icon, cardTitle, label]) => `
         <a href='#${route}' class='dashboard-card' data-nav='${route}'>
           <div class='dashboard-card-icon'>${icon}</div>
           <h3 class='dashboard-card-title'>${cardTitle}</h3>
           <p class='dashboard-card-label'>${label}</p>
         </a>
-      `)
-      .join('');
+      `,
+      )
+      .join("");
 
     return `
       <main class='container dashboard'>
@@ -514,7 +576,15 @@
   }
 
   function weeklyContent() {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
     return `
       <main class='container'>
         <div class='card weekly-card'>
@@ -530,7 +600,7 @@
                   </div>
                 `;
               })
-              .join('')}
+              .join("")}
           </div>
         </div>
       </main>
@@ -594,12 +664,12 @@
   }
 
   function profileContent() {
-    const username = State.username || 'User';
+    const username = State.username || "User";
     const safeName = escapeAttribute(username);
     return `
       <main class='container'>
         <div class='card profile-container surface stack center'>
-          <img src='https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}' alt='Profile Avatar' class='profile-avatar' id='profileAvatar' width='120' height='120' loading='lazy' decoding='async'>
+          <img src='https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}' alt='Profile Avatar' class='profile-avatar' id='profileAvatar' width='120' height='120'>
           <h2 class='profile-name' id='profileName'>${safeName}</h2>
           <p class='profile-role'>Fitness Enthusiast</p>
           <button class='change-name-btn' id='changeNameBtn' type='button'>✏️ Change Name</button>
@@ -765,7 +835,7 @@
     return `
       <main class='container about-page'>
         <article class='about-card surface'>
-          <img src='images/about-fitness.webp' alt='Fitness tracking illustration' class='about-image' loading='lazy'>
+          <img src='images/about-fitness.webp' alt='Fitness tracking illustration' class='about-image'>
 
           <section class='about-section'>
             <p class='about-kicker'>About FitTrack</p>
@@ -796,18 +866,20 @@
   }
 
   function mountHome(root) {
-    const welcomeMessage = root.querySelector('#welcomeMessage');
-    const currentDate = root.querySelector('#currentDate');
-    const todaySteps = root.querySelector('#todaySteps');
-    const waterIntake = root.querySelector('#waterIntake');
-    const currentStreak = root.querySelector('#currentStreak');
+    const welcomeMessage = root.querySelector("#welcomeMessage");
+    const currentDate = root.querySelector("#currentDate");
+    const todaySteps = root.querySelector("#todaySteps");
+    const waterIntake = root.querySelector("#waterIntake");
+    const currentStreak = root.querySelector("#currentStreak");
 
     function updateDashboard() {
       const summary = getDashboardSummary();
       const username = State.username;
 
       if (welcomeMessage) {
-        welcomeMessage.textContent = username ? `Welcome back, ${username} 👋` : 'Welcome to FitTrack 👋';
+        welcomeMessage.textContent = username
+          ? `Welcome back, ${username} 👋`
+          : "Welcome to FitTrack 👋";
       }
 
       if (currentDate) {
@@ -838,14 +910,14 @@
   }
 
   function mountSteps(root) {
-    const stepNumber = root.querySelector('#stepNumber');
-    const caloriesBurned = root.querySelector('#caloriesBurned');
-    const distanceKm = root.querySelector('#distanceKm');
-    const resetBtn = root.querySelector('#resetBtn');
-    const startStopBtn = root.querySelector('#startStopBtn');
-    const statusMessage = root.querySelector('#statusMessage');
-    const progressCircle = root.querySelector('#progressRingCircle');
-    const stepCounterCard = root.querySelector('.step-counter-card');
+    const stepNumber = root.querySelector("#stepNumber");
+    const caloriesBurned = root.querySelector("#caloriesBurned");
+    const distanceKm = root.querySelector("#distanceKm");
+    const resetBtn = root.querySelector("#resetBtn");
+    const startStopBtn = root.querySelector("#startStopBtn");
+    const statusMessage = root.querySelector("#statusMessage");
+    const progressCircle = root.querySelector("#progressRingCircle");
+    const stepCounterCard = root.querySelector(".step-counter-card");
 
     let stepCount = 0;
     let displayedStepCount = 0;
@@ -882,46 +954,20 @@
       }
 
       if (stepAnimationFrame !== null) {
-        cancelAnimationFrame(stepAnimationFrame);
         stepAnimationFrame = null;
       }
 
-      if (!animateCount || prefersReducedMotion || displayedStepCount === targetValue) {
-        displayedStepCount = targetValue;
-        stepNumber.textContent = formatNumber(targetValue);
-        return;
-      }
-
-      const startValue = displayedStepCount;
-      const duration = 360;
-      const delta = targetValue - startValue;
-      const startTime = performance.now();
-
-      const tick = (now) => {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const currentValue = Math.round(startValue + delta * eased);
-        displayedStepCount = currentValue;
-        stepNumber.textContent = formatNumber(currentValue);
-
-        if (progress < 1) {
-          stepAnimationFrame = requestAnimationFrame(tick);
-          return;
-        }
-
-        displayedStepCount = targetValue;
-        stepNumber.textContent = formatNumber(targetValue);
-        stepAnimationFrame = null;
-      };
-
-      stepAnimationFrame = requestAnimationFrame(tick);
+      displayedStepCount = targetValue;
+      stepNumber.textContent = formatNumber(targetValue);
     }
 
     function updateDisplay(options = {}) {
       renderStepCount(stepCount, options.animateCount !== false);
 
       if (caloriesBurned) {
-        caloriesBurned.textContent = formatNumber(Math.round(stepCount * CALORIES_PER_STEP));
+        caloriesBurned.textContent = formatNumber(
+          Math.round(stepCount * CALORIES_PER_STEP),
+        );
       }
 
       if (distanceKm) {
@@ -938,7 +984,10 @@
       }
 
       if (stepCounterCard) {
-        stepCounterCard.classList.toggle('goal-achieved', stepCount >= STEP_GOAL);
+        stepCounterCard.classList.toggle(
+          "goal-achieved",
+          stepCount >= STEP_GOAL,
+        );
       }
     }
 
@@ -947,7 +996,9 @@
         return;
       }
 
-      startStopBtn.textContent = isTracking ? 'Stop Tracking' : 'Start Tracking';
+      startStopBtn.textContent = isTracking
+        ? "Stop Tracking"
+        : "Start Tracking";
     }
 
     function startTracking() {
@@ -955,13 +1006,15 @@
         return;
       }
 
-      if (typeof DeviceMotionEvent === 'undefined') {
-        setStatus('Device motion is not supported on this device.');
+      if (typeof DeviceMotionEvent === "undefined") {
+        setStatus("Device motion is not supported on this device.");
         return;
       }
 
       if (!motionAttached) {
-        window.addEventListener('devicemotion', handleMotion, { passive: true });
+        window.addEventListener("devicemotion", handleMotion, {
+          passive: true,
+        });
         motionAttached = true;
       }
 
@@ -969,10 +1022,10 @@
       stepArmed = false;
       lastStepTime = 0;
       updateButtonLabel();
-      setStatus('Tracking active');
+      setStatus("Tracking active");
     }
 
-    function stopTracking(message = 'Tracking stopped') {
+    function stopTracking(message = "Tracking stopped") {
       isTracking = false;
       stepArmed = false;
       updateButtonLabel();
@@ -980,28 +1033,28 @@
     }
 
     function requestMotionPermission() {
-      if (typeof DeviceMotionEvent === 'undefined') {
-        setStatus('Device motion is not supported on this device.');
+      if (typeof DeviceMotionEvent === "undefined") {
+        setStatus("Device motion is not supported on this device.");
         return;
       }
 
-      if (typeof DeviceMotionEvent.requestPermission !== 'function') {
+      if (typeof DeviceMotionEvent.requestPermission !== "function") {
         startTracking();
         return;
       }
 
       DeviceMotionEvent.requestPermission()
         .then((permission) => {
-          if (permission === 'granted') {
+          if (permission === "granted") {
             startTracking();
             return;
           }
 
-          setStatus('Permission denied');
+          setStatus("Permission denied");
         })
         .catch((error) => {
-          console.error('Permission request error:', error);
-          setStatus('Permission denied');
+          console.error("Permission request error:", error);
+          setStatus("Permission denied");
         });
     }
 
@@ -1014,13 +1067,13 @@
       updateDisplay({ animateCount: true });
 
       if (stepCount === STEP_GOAL) {
-        setStatus('🎉 Daily goal achieved!');
+        setStatus("🎉 Daily goal achieved!");
       }
 
-      console.log('Step detected:', {
+      console.log("Step detected:", {
         stepCount,
         distanceKm: Number(distanceValue.toFixed(3)),
-        magnitude: Number(magnitude.toFixed(2))
+        magnitude: Number(magnitude.toFixed(2)),
       });
     }
 
@@ -1041,7 +1094,11 @@
         stepArmed = true;
       }
 
-      if (stepArmed && magnitude <= STEP_LOWER_THRESHOLD && timeSinceLastStep >= STEP_COOLDOWN) {
+      if (
+        stepArmed &&
+        magnitude <= STEP_LOWER_THRESHOLD &&
+        timeSinceLastStep >= STEP_COOLDOWN
+      ) {
         handleStepDetected(magnitude);
       }
 
@@ -1051,7 +1108,7 @@
     }
 
     function resetSteps() {
-      if (!window.confirm('Are you sure you want to reset your step count?')) {
+      if (!window.confirm("Are you sure you want to reset your step count?")) {
         return;
       }
 
@@ -1061,22 +1118,22 @@
       lastStepTime = 0;
       persistSteps();
       updateDisplay({ animateCount: true });
-      stopTracking('Ready to track your steps!');
+      stopTracking("Ready to track your steps!");
     }
 
     syncFromStorage();
     updateDisplay({ animateCount: !prefersReducedMotion });
     updateButtonLabel();
-    setStatus('Ready to track your steps!');
+    setStatus("Ready to track your steps!");
 
     if (resetBtn) {
-      resetBtn.addEventListener('click', resetSteps);
+      resetBtn.addEventListener("click", resetSteps);
     }
 
     if (startStopBtn) {
-      startStopBtn.addEventListener('click', () => {
+      startStopBtn.addEventListener("click", () => {
         if (isTracking) {
-          stopTracking('Tracking stopped');
+          stopTracking("Tracking stopped");
           return;
         }
 
@@ -1088,11 +1145,7 @@
 
     return () => {
       if (motionAttached) {
-        window.removeEventListener('devicemotion', handleMotion);
-      }
-
-      if (stepAnimationFrame !== null) {
-        cancelAnimationFrame(stepAnimationFrame);
+        window.removeEventListener("devicemotion", handleMotion);
       }
 
       if (window.updateStepDisplay === updateDisplay) {
@@ -1102,13 +1155,21 @@
   }
 
   function mountWeekly(root) {
-    const weeklyList = root.querySelector('#weeklyList');
+    const weeklyList = root.querySelector("#weeklyList");
 
     function renderWeeklySummary() {
       const weeklyData = getWeeklyData();
       const today = new Date();
       const currentDay = today.getDay();
-      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
       const startOfWeek = new Date(today);
       const daysSinceMonday = (currentDay + 6) % 7;
       startOfWeek.setDate(today.getDate() - daysSinceMonday);
@@ -1117,24 +1178,26 @@
         return;
       }
 
-      weeklyList.querySelectorAll('.weekly-item').forEach((item, index) => {
+      weeklyList.querySelectorAll(".weekly-item").forEach((item, index) => {
         const date = new Date(startOfWeek);
         date.setDate(startOfWeek.getDate() + index);
         const steps = getStepsForDate(date, weeklyData);
-        const dayStepsElement = item.querySelector('.day-steps');
-        const dayNameElement = item.querySelector('.day-name');
-        const itemDay = item.getAttribute('data-day');
+        const dayStepsElement = item.querySelector(".day-steps");
+        const dayNameElement = item.querySelector(".day-name");
+        const itemDay = item.getAttribute("data-day");
         const todayName = dayNames[currentDay];
 
         if (dayNameElement) {
-          dayNameElement.textContent = date.toLocaleDateString('en-US', { weekday: 'short' });
+          dayNameElement.textContent = date.toLocaleDateString("en-US", {
+            weekday: "short",
+          });
         }
 
         if (dayStepsElement) {
           dayStepsElement.textContent = `${formatNumber(steps)} steps`;
         }
 
-        item.classList.toggle('current-day', itemDay === todayName);
+        item.classList.toggle("current-day", itemDay === todayName);
       });
     }
 
@@ -1149,25 +1212,29 @@
   }
 
   function mountWater(root) {
-    const waterCount = root.querySelector('#waterCount');
-    const waterProgress = root.querySelector('#waterProgress');
-    const waterPercentage = root.querySelector('#waterPercentage');
-    const waterGlasses = root.querySelector('#waterGlasses');
-    const addGlassBtn = root.querySelector('#addGlassBtn');
-    const resetWaterBtn = root.querySelector('#resetWaterBtn');
-    const statusMessage = root.querySelector('#statusMessage-water');
+    const waterCount = root.querySelector("#waterCount");
+    const waterProgress = root.querySelector("#waterProgress");
+    const waterPercentage = root.querySelector("#waterPercentage");
+    const waterGlasses = root.querySelector("#waterGlasses");
+    const addGlassBtn = root.querySelector("#addGlassBtn");
+    const resetWaterBtn = root.querySelector("#resetWaterBtn");
+    const statusMessage = root.querySelector("#statusMessage-water");
     let currentCount = 0;
-    let waterDisplayFrame = null;
-    let waterGlassesFrame = null;
 
-    function setStatus(message, tone = 'default') {
+    function setStatus(message, tone = "default") {
       if (!statusMessage) {
         return;
       }
 
       statusMessage.textContent = message;
-      statusMessage.classList.remove('is-success', 'is-error', 'is-updated');
-      statusMessage.classList.add(tone === 'success' ? 'is-success' : tone === 'error' ? 'is-error' : 'is-updated');
+      statusMessage.classList.remove("is-success", "is-error", "is-updated");
+      statusMessage.classList.add(
+        tone === "success"
+          ? "is-success"
+          : tone === "error"
+            ? "is-error"
+            : "is-updated",
+      );
     }
 
     function loadWaterData() {
@@ -1178,44 +1245,37 @@
     function saveWaterData() {
       State.update({
         water: currentCount,
-        waterDate: todayKey()
+        waterDate: todayKey(),
       });
     }
 
     function updateGoalState() {
       const goalReached = currentCount >= WATER_GOAL;
       if (waterProgress) {
-        waterProgress.classList.toggle('goal-reached', goalReached);
+        waterProgress.classList.toggle("goal-reached", goalReached);
       }
 
       if (waterGlasses) {
-        waterGlasses.classList.toggle('goal-reached', goalReached);
+        waterGlasses.classList.toggle("goal-reached", goalReached);
       }
     }
 
     function updateDisplay() {
-      if (waterDisplayFrame !== null) {
-        cancelAnimationFrame(waterDisplayFrame);
+      if (waterCount) {
+        waterCount.textContent = String(currentCount);
       }
 
-      waterDisplayFrame = scheduleFrame(() => {
-        if (waterCount) {
-          waterCount.textContent = String(currentCount);
-        }
+      const percentage = Math.min((currentCount / WATER_GOAL) * 100, 100);
 
-        const percentage = Math.min((currentCount / WATER_GOAL) * 100, 100);
+      if (waterProgress) {
+        waterProgress.style.width = `${percentage}%`;
+      }
 
-        if (waterProgress) {
-          waterProgress.style.width = `${percentage}%`;
-        }
+      if (waterPercentage) {
+        waterPercentage.textContent = `${Math.round(percentage)}%`;
+      }
 
-        if (waterPercentage) {
-          waterPercentage.textContent = `${Math.round(percentage)}%`;
-        }
-
-        updateGoalState();
-        waterDisplayFrame = null;
-      });
+      updateGoalState();
     }
 
     function renderGlasses() {
@@ -1223,32 +1283,20 @@
         return;
       }
 
-      if (waterGlassesFrame !== null) {
-        cancelAnimationFrame(waterGlassesFrame);
+      waterGlasses.innerHTML = "";
+
+      for (let index = 0; index < WATER_GOAL; index += 1) {
+        const glass = document.createElement("div");
+        glass.className = "water-glass";
+        glass.textContent = index < currentCount ? "💧" : "🥛";
+
+        waterGlasses.appendChild(glass);
       }
-
-      waterGlassesFrame = scheduleFrame(() => {
-        waterGlasses.innerHTML = '';
-
-        for (let index = 0; index < WATER_GOAL; index += 1) {
-          const glass = document.createElement('div');
-          glass.className = 'water-glass';
-          glass.textContent = index < currentCount ? '💧' : '🥛';
-
-          if (index < currentCount && !prefersReducedMotion) {
-            glass.style.animationDelay = `${index * 35}ms`;
-          }
-
-          waterGlasses.appendChild(glass);
-        }
-
-        waterGlassesFrame = null;
-      });
     }
 
     function addGlass() {
       if (currentCount >= WATER_GOAL) {
-        setStatus('You have reached your daily water goal!', 'success');
+        setStatus("You have reached your daily water goal!", "success");
         return;
       }
 
@@ -1258,15 +1306,17 @@
       renderGlasses();
 
       if (currentCount === WATER_GOAL) {
-        setStatus('🎉 Daily water goal achieved!', 'success');
+        setStatus("🎉 Daily water goal achieved!", "success");
         return;
       }
 
-      setStatus('Water added', 'updated');
+      setStatus("Water added", "updated");
     }
 
     function resetWater() {
-      if (!window.confirm('Are you sure you want to reset your water intake?')) {
+      if (
+        !window.confirm("Are you sure you want to reset your water intake?")
+      ) {
         return;
       }
 
@@ -1274,20 +1324,20 @@
       saveWaterData();
       updateDisplay();
       renderGlasses();
-      setStatus('Water intake reset', 'updated');
+      setStatus("Water intake reset", "updated");
     }
 
     loadWaterData();
     updateDisplay();
     renderGlasses();
-    setStatus('Water tracker ready', 'updated');
+    setStatus("Water tracker ready", "updated");
 
     if (addGlassBtn) {
-      addGlassBtn.addEventListener('click', addGlass);
+      addGlassBtn.addEventListener("click", addGlass);
     }
 
     if (resetWaterBtn) {
-      resetWaterBtn.addEventListener('click', resetWater);
+      resetWaterBtn.addEventListener("click", resetWater);
     }
 
     window.loadWaterData = loadWaterData;
@@ -1300,12 +1350,9 @@
   }
 
   function mountQuotes(root) {
-    const quoteText = root.querySelector('#quoteText');
-    const quoteAuthor = root.querySelector('#quoteAuthor');
-    const newQuoteBtn = root.querySelector('#newQuoteBtn');
-    const quoteContainer = root.querySelector('.quote-container');
-    let quoteSwapFrame = null;
-    let quoteAnimationCleanup = null;
+    const quoteText = root.querySelector("#quoteText");
+    const quoteAuthor = root.querySelector("#quoteAuthor");
+    const newQuoteBtn = root.querySelector("#newQuoteBtn");
 
     function displayQuote(quote) {
       if (quoteText) {
@@ -1318,38 +1365,14 @@
     }
 
     function swapQuote(quote) {
-      if (prefersReducedMotion || !quoteContainer) {
-        displayQuote(quote);
-        return;
-      }
-
-      if (quoteSwapFrame !== null) {
-        cancelAnimationFrame(quoteSwapFrame);
-      }
-
-      if (quoteAnimationCleanup) {
-        quoteContainer.removeEventListener('animationend', quoteAnimationCleanup);
-        quoteAnimationCleanup = null;
-      }
-
-      quoteContainer.classList.add('is-changing');
-      quoteSwapFrame = scheduleFrame(() => {
-        displayQuote(quote);
-        quoteAnimationCleanup = (event) => {
-          if (event.target === quoteContainer) {
-            quoteContainer.classList.remove('is-changing');
-            quoteAnimationCleanup = null;
-          }
-        };
-        quoteContainer.addEventListener('animationend', quoteAnimationCleanup, { once: true });
-      });
+      displayQuote(quote);
     }
 
     const dailyQuote = getDailyQuote();
     displayQuote(dailyQuote);
 
     if (newQuoteBtn) {
-      newQuoteBtn.addEventListener('click', () => {
+      newQuoteBtn.addEventListener("click", () => {
         swapQuote(getRandomQuote());
       });
     }
@@ -1357,10 +1380,6 @@
     window.displayQuote = displayQuote;
 
     return () => {
-      if (quoteSwapFrame !== null) {
-        cancelAnimationFrame(quoteSwapFrame);
-      }
-
       if (window.displayQuote === displayQuote) {
         delete window.displayQuote;
       }
@@ -1368,7 +1387,7 @@
   }
 
   function mountNutrition(root) {
-    const foodGrid = root.querySelector('#foodGrid');
+    const foodGrid = root.querySelector("#foodGrid");
     if (foodGrid) {
       foodGrid.innerHTML = foods
         .map(
@@ -1376,37 +1395,43 @@
             <article class='nutrition-card food-card'>
               <picture class='nutrition-media food-img'>
                 <source type='image/webp' srcset='${food.imageWebp}'>
-                <img src='${food.imageWebp}' alt='${escapeAttribute(food.alt || food.name)}' loading='lazy' decoding='async'>
+                <img src='${food.imageWebp}' alt='${escapeAttribute(food.alt || food.name)}'>
               </picture>
               <h3 class='nutrition-title food-name'>${food.name}</h3>
               <p class='nutrition-copy food-benefit'>${food.benefit}</p>
             </article>
-          `
+          `,
         )
-        .join('');
+        .join("");
     }
 
     return () => {};
   }
 
   function mountProfile(root) {
-    const profileAvatar = root.querySelector('#profileAvatar');
-    const profileName = root.querySelector('#profileName');
-    const weightInput = root.querySelector('#weightInput');
-    const weightDisplay = root.querySelector('#weightDisplay');
-    const saveWeightBtn = root.querySelector('#saveWeightBtn');
-    const changeNameBtn = root.querySelector('#changeNameBtn');
-    const statusMessage = root.querySelector('#statusMessage-profile');
+    const profileAvatar = root.querySelector("#profileAvatar");
+    const profileName = root.querySelector("#profileName");
+    const weightInput = root.querySelector("#weightInput");
+    const weightDisplay = root.querySelector("#weightDisplay");
+    const saveWeightBtn = root.querySelector("#saveWeightBtn");
+    const changeNameBtn = root.querySelector("#changeNameBtn");
+    const statusMessage = root.querySelector("#statusMessage-profile");
 
-    function updateStatus(message, tone = 'updated') {
+    function updateStatus(message, tone = "updated") {
       if (!statusMessage) {
         return;
       }
 
-      statusMessage.classList.remove('is-success', 'is-error', 'is-updated');
-      statusMessage.classList.add(tone === 'success' ? 'is-success' : tone === 'error' ? 'is-error' : 'is-updated');
+      statusMessage.classList.remove("is-success", "is-error", "is-updated");
+      statusMessage.classList.add(
+        tone === "success"
+          ? "is-success"
+          : tone === "error"
+            ? "is-error"
+            : "is-updated",
+      );
       statusMessage.textContent = message;
-      statusMessage.style.display = 'block';
+      statusMessage.style.display = "block";
 
       if (!prefersReducedMotion) {
         void statusMessage.offsetWidth;
@@ -1414,7 +1439,7 @@
     }
 
     function loadUserProfile() {
-      const username = State.username || 'User';
+      const username = State.username || "User";
 
       if (profileName) {
         profileName.textContent = username;
@@ -1434,14 +1459,14 @@
 
       if (savedWeight && weightDisplay) {
         weightDisplay.textContent = `Current Weight: ${savedWeight} kg`;
-        weightDisplay.style.display = 'block';
+        weightDisplay.style.display = "block";
       }
     }
 
     function saveWeight() {
-      const weight = weightInput ? weightInput.value.trim() : '';
+      const weight = weightInput ? weightInput.value.trim() : "";
       if (!weight || Number.isNaN(Number(weight)) || Number(weight) <= 0) {
-        updateStatus('⚠️ Please enter a valid weight', 'error');
+        updateStatus("⚠️ Please enter a valid weight", "error");
         return;
       }
 
@@ -1449,27 +1474,27 @@
 
       if (weightDisplay) {
         weightDisplay.textContent = `Current Weight: ${weight} kg`;
-        weightDisplay.style.display = 'block';
+        weightDisplay.style.display = "block";
       }
 
-      updateStatus('✓ Profile updated successfully!', 'success');
+      updateStatus("✓ Profile updated successfully!", "success");
 
       window.setTimeout(() => {
         if (statusMessage) {
-          statusMessage.style.display = 'none';
+          statusMessage.style.display = "none";
         }
       }, 3000);
     }
 
     function showEditNameModal() {
-      if (document.getElementById('editNameModal')) {
+      if (document.getElementById("editNameModal")) {
         return;
       }
 
-      const currentName = State.username || '';
-      const modal = document.createElement('div');
-      modal.id = 'editNameModal';
-      modal.className = 'name-modal-overlay';
+      const currentName = State.username || "";
+      const modal = document.createElement("div");
+      modal.id = "editNameModal";
+      modal.className = "name-modal-overlay";
       modal.innerHTML = `
         <div class='name-modal-content'>
           <h2 class='name-modal-title'>Change Your Name</h2>
@@ -1483,22 +1508,22 @@
       `;
 
       document.body.appendChild(modal);
-      document.body.classList.add('modal-open');
+      document.body.classList.add("modal-open");
 
-      const editInput = modal.querySelector('#editNameInput');
-      const updateBtn = modal.querySelector('#updateNameBtn');
-      const cancelBtn = modal.querySelector('#cancelEditBtn');
+      const editInput = modal.querySelector("#editNameInput");
+      const updateBtn = modal.querySelector("#updateNameBtn");
+      const cancelBtn = modal.querySelector("#cancelEditBtn");
 
       function closeModal() {
-        modal.style.opacity = '0';
-        document.body.classList.remove('modal-open');
+        modal.style.opacity = "0";
+        document.body.classList.remove("modal-open");
         window.setTimeout(() => {
           modal.remove();
         }, 300);
       }
 
       function handleNameUpdate() {
-        const name = editInput ? editInput.value.trim() : '';
+        const name = editInput ? editInput.value.trim() : "";
         if (!name) {
           if (editInput) {
             editInput.focus();
@@ -1514,23 +1539,23 @@
 
       if (editInput) {
         window.setTimeout(() => editInput.focus(), 100);
-        editInput.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter') {
+        editInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
             handleNameUpdate();
           }
 
-          if (event.key === 'Escape') {
+          if (event.key === "Escape") {
             closeModal();
           }
         });
       }
 
       if (updateBtn) {
-        updateBtn.addEventListener('click', handleNameUpdate);
+        updateBtn.addEventListener("click", handleNameUpdate);
       }
 
       if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener("click", closeModal);
       }
 
       return closeModal;
@@ -1546,11 +1571,11 @@
     loadWeight();
 
     if (saveWeightBtn) {
-      saveWeightBtn.addEventListener('click', saveWeight);
+      saveWeightBtn.addEventListener("click", saveWeight);
     }
 
     if (changeNameBtn) {
-      changeNameBtn.addEventListener('click', showEditNameModal);
+      changeNameBtn.addEventListener("click", showEditNameModal);
     }
 
     window.loadUserProfile = loadUserProfile;
@@ -1568,12 +1593,12 @@
   }
 
   function mountProgress(root) {
-    const todaySteps = root.querySelector('#todaySteps');
-    const weeklyTotal = root.querySelector('#weeklyTotal');
-    const caloriesBurned = root.querySelector('#caloriesBurned');
-    const waterIntake = root.querySelector('#waterIntake');
-    const goalPercent = root.querySelector('#goalPercent');
-    const activeDays = root.querySelector('#activeDays');
+    const todaySteps = root.querySelector("#todaySteps");
+    const weeklyTotal = root.querySelector("#weeklyTotal");
+    const caloriesBurned = root.querySelector("#caloriesBurned");
+    const waterIntake = root.querySelector("#waterIntake");
+    const goalPercent = root.querySelector("#goalPercent");
+    const activeDays = root.querySelector("#activeDays");
 
     function loadProgressData() {
       const summary = getDashboardSummary();
@@ -1606,7 +1631,9 @@
       }
 
       if (caloriesBurned) {
-        caloriesBurned.textContent = formatNumber(Math.round(summary.steps * CALORIES_PER_STEP));
+        caloriesBurned.textContent = formatNumber(
+          Math.round(summary.steps * CALORIES_PER_STEP),
+        );
       }
 
       if (waterIntake) {
@@ -1633,15 +1660,15 @@
   }
 
   function mountDistance(root) {
-    const distanceDisplay = root.querySelector('#distanceDisplay');
-    const distanceSteps = root.querySelector('#distanceSteps');
-    const distanceCalories = root.querySelector('#distanceCalories');
-    const durationElement = root.querySelector('#duration');
-    const avgSpeedElement = root.querySelector('#avgSpeed');
-    const trackingStatus = root.querySelector('#trackingStatus');
-    const startBtn = root.querySelector('#startBtn');
-    const stopBtn = root.querySelector('#stopBtn');
-    const statusMessage = root.querySelector('#statusMessage-distance');
+    const distanceDisplay = root.querySelector("#distanceDisplay");
+    const distanceSteps = root.querySelector("#distanceSteps");
+    const distanceCalories = root.querySelector("#distanceCalories");
+    const durationElement = root.querySelector("#duration");
+    const avgSpeedElement = root.querySelector("#avgSpeed");
+    const trackingStatus = root.querySelector("#trackingStatus");
+    const startBtn = root.querySelector("#startBtn");
+    const stopBtn = root.querySelector("#stopBtn");
+    const statusMessage = root.querySelector("#statusMessage-distance");
 
     let isTracking = false;
     let totalDistance = 0;
@@ -1650,14 +1677,20 @@
     let watchId = null;
     let timerInterval = null;
 
-    function setStatus(message, tone = 'default') {
+    function setStatus(message, tone = "default") {
       if (!statusMessage) {
         return;
       }
 
       statusMessage.textContent = message;
-      statusMessage.classList.remove('is-success', 'is-error', 'is-updated');
-      statusMessage.classList.add(tone === 'success' ? 'is-success' : tone === 'error' ? 'is-error' : 'is-updated');
+      statusMessage.classList.remove("is-success", "is-error", "is-updated");
+      statusMessage.classList.add(
+        tone === "success"
+          ? "is-success"
+          : tone === "error"
+            ? "is-error"
+            : "is-updated",
+      );
     }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -1666,7 +1699,10 @@
       const dLon = ((lon2 - lon1) * Math.PI) / 180;
       const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        Math.cos((lat1 * Math.PI) / 180) *
+          Math.cos((lat2 * Math.PI) / 180) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return earthRadius * c;
     }
@@ -1677,11 +1713,15 @@
       }
 
       if (distanceSteps) {
-        distanceSteps.textContent = formatNumber(Math.round(totalDistance / STEP_LENGTH_KM));
+        distanceSteps.textContent = formatNumber(
+          Math.round(totalDistance / STEP_LENGTH_KM),
+        );
       }
 
       if (distanceCalories) {
-        distanceCalories.textContent = formatNumber(Math.round((totalDistance / STEP_LENGTH_KM) * CALORIES_PER_STEP));
+        distanceCalories.textContent = formatNumber(
+          Math.round((totalDistance / STEP_LENGTH_KM) * CALORIES_PER_STEP),
+        );
       }
     }
 
@@ -1703,7 +1743,12 @@
       const { latitude, longitude } = position.coords;
 
       if (lastPosition) {
-        const distance = calculateDistance(lastPosition.latitude, lastPosition.longitude, latitude, longitude);
+        const distance = calculateDistance(
+          lastPosition.latitude,
+          lastPosition.longitude,
+          latitude,
+          longitude,
+        );
         if (distance > 0.005) {
           totalDistance += distance;
           updateDistanceDisplay();
@@ -1713,7 +1758,7 @@
       lastPosition = { latitude, longitude };
     }
 
-    function stopTracking(message = 'Walk completed!') {
+    function stopTracking(message = "Walk completed!") {
       isTracking = false;
 
       if (watchId !== null) {
@@ -1727,28 +1772,28 @@
       }
 
       if (startBtn) {
-        startBtn.style.display = 'block';
+        startBtn.style.display = "block";
       }
 
       if (stopBtn) {
-        stopBtn.style.display = 'none';
+        stopBtn.style.display = "none";
       }
 
       if (trackingStatus) {
-        trackingStatus.textContent = 'Stopped';
+        trackingStatus.textContent = "Stopped";
       }
 
-      setStatus(message, 'updated');
+      setStatus(message, "updated");
     }
 
     function handleError(error) {
-      setStatus(`Unable to get location: ${error.message}`, 'error');
-      stopTracking('Walk completed!');
+      setStatus(`Unable to get location: ${error.message}`, "error");
+      stopTracking("Walk completed!");
     }
 
     function startTracking() {
       if (!navigator.geolocation) {
-        setStatus('Geolocation not supported', 'error');
+        setStatus("Geolocation not supported", "error");
         return;
       }
 
@@ -1759,41 +1804,45 @@
       updateDistanceDisplay();
 
       if (startBtn) {
-        startBtn.style.display = 'none';
+        startBtn.style.display = "none";
       }
 
       if (stopBtn) {
-        stopBtn.style.display = 'block';
+        stopBtn.style.display = "block";
       }
 
       if (trackingStatus) {
-        trackingStatus.textContent = 'Tracking...';
+        trackingStatus.textContent = "Tracking...";
       }
 
-      setStatus('✓ GPS tracking active', 'success');
+      setStatus("✓ GPS tracking active", "success");
 
-      watchId = navigator.geolocation.watchPosition(handlePosition, handleError, {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 5000
-      });
+      watchId = navigator.geolocation.watchPosition(
+        handlePosition,
+        handleError,
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 5000,
+        },
+      );
 
       timerInterval = window.setInterval(updateTimer, 1000);
     }
 
     if (startBtn) {
-      startBtn.addEventListener('click', startTracking);
+      startBtn.addEventListener("click", startTracking);
     }
 
     if (stopBtn) {
-      stopBtn.addEventListener('click', () => stopTracking());
+      stopBtn.addEventListener("click", () => stopTracking());
     }
 
-    setStatus('Click "Start Walk" to begin tracking', 'updated');
+    setStatus('Click "Start Walk" to begin tracking', "updated");
     window.loadDistanceData = updateDistanceDisplay;
 
     return () => {
-      stopTracking('Walk completed!');
+      stopTracking("Walk completed!");
       if (window.loadDistanceData === updateDistanceDisplay) {
         delete window.loadDistanceData;
       }
@@ -1801,105 +1850,105 @@
   }
 
   function mountSettings(root) {
-    const themeToggle = root.querySelector('#themeToggle');
-    const themeStatus = root.querySelector('#themeStatus');
-    const notificationToggle = root.querySelector('#notificationToggle');
-    const notificationStatus = root.querySelector('#notificationStatus');
-    const soundToggle = root.querySelector('#soundToggle');
-    const soundStatus = root.querySelector('#soundStatus');
+    const themeToggle = root.querySelector("#themeToggle");
+    const themeStatus = root.querySelector("#themeStatus");
+    const notificationToggle = root.querySelector("#notificationToggle");
+    const notificationStatus = root.querySelector("#notificationStatus");
+    const soundToggle = root.querySelector("#soundToggle");
+    const soundStatus = root.querySelector("#soundStatus");
 
     function syncToggle(toggleElement, enabled) {
       if (!toggleElement) {
         return;
       }
 
-      toggleElement.classList.toggle('active', enabled);
-      toggleElement.setAttribute('aria-checked', enabled ? 'true' : 'false');
+      toggleElement.classList.toggle("active", enabled);
+      toggleElement.setAttribute("aria-checked", enabled ? "true" : "false");
     }
 
     function flashToggle(toggleElement, statusElement) {
-      if (prefersReducedMotion) {
-        return;
-      }
-
-      if (toggleElement) {
-        toggleElement.classList.add('is-updating');
-        toggleElement.addEventListener('animationend', () => {
-          toggleElement.classList.remove('is-updating');
-        }, { once: true });
-      }
-
-      if (statusElement) {
-        statusElement.classList.remove('is-updated');
-        scheduleFrame(() => {
-          statusElement.classList.add('is-updated');
-          statusElement.addEventListener('animationend', () => {
-            statusElement.classList.remove('is-updated');
-          }, { once: true });
-        });
+      if (toggleElement && statusElement) {
+        statusElement.textContent = statusElement.textContent;
       }
     }
 
     function loadTheme() {
-      const isDark = State.theme === 'dark';
-      document.body.classList.toggle('dark', isDark);
+      const isDark = State.theme === "dark";
+      document.body.classList.toggle("dark", isDark);
       syncToggle(themeToggle, isDark);
       if (themeStatus) {
-        themeStatus.textContent = isDark ? 'Theme: Dark Mode' : 'Theme: Light Mode';
+        themeStatus.textContent = isDark
+          ? "Theme: Dark Mode"
+          : "Theme: Light Mode";
       }
     }
 
     function toggleThemeUI() {
-      const isDark = typeof window.toggleThemeGlobal === 'function' ? window.toggleThemeGlobal() : !document.body.classList.contains('dark');
-      State.theme = isDark ? 'dark' : 'light';
+      const isDark =
+        typeof window.toggleThemeGlobal === "function"
+          ? window.toggleThemeGlobal()
+          : !document.body.classList.contains("dark");
+      State.theme = isDark ? "dark" : "light";
       syncToggle(themeToggle, isDark);
       if (themeStatus) {
-        themeStatus.textContent = isDark ? 'Theme: Dark Mode' : 'Theme: Light Mode';
+        themeStatus.textContent = isDark
+          ? "Theme: Dark Mode"
+          : "Theme: Light Mode";
       }
       flashToggle(themeToggle, themeStatus);
     }
 
     function loadNotificationSetting() {
-      const isOn = State.notifications !== 'off';
-      State.notifications = isOn ? 'on' : 'off';
+      const isOn = State.notifications !== "off";
+      State.notifications = isOn ? "on" : "off";
       syncToggle(notificationToggle, isOn);
       if (notificationStatus) {
-        notificationStatus.textContent = isOn ? 'Notifications: On' : 'Notifications: Off';
+        notificationStatus.textContent = isOn
+          ? "Notifications: On"
+          : "Notifications: Off";
       }
     }
 
     function toggleNotification() {
-      const isOn = !(notificationToggle && notificationToggle.classList.contains('active'));
-      State.notifications = isOn ? 'on' : 'off';
+      const isOn = !(
+        notificationToggle && notificationToggle.classList.contains("active")
+      );
+      State.notifications = isOn ? "on" : "off";
       syncToggle(notificationToggle, isOn);
       if (notificationStatus) {
-        notificationStatus.textContent = isOn ? 'Notifications: On' : 'Notifications: Off';
+        notificationStatus.textContent = isOn
+          ? "Notifications: On"
+          : "Notifications: Off";
       }
       flashToggle(notificationToggle, notificationStatus);
     }
 
     function loadSoundSetting() {
-      const isOn = State.sound !== 'off';
-      State.sound = isOn ? 'on' : 'off';
+      const isOn = State.sound !== "off";
+      State.sound = isOn ? "on" : "off";
       syncToggle(soundToggle, isOn);
       if (soundStatus) {
-        soundStatus.textContent = isOn ? 'Sound Effects: On' : 'Sound Effects: Off';
+        soundStatus.textContent = isOn
+          ? "Sound Effects: On"
+          : "Sound Effects: Off";
       }
     }
 
     function toggleSound() {
-      const isOn = !(soundToggle && soundToggle.classList.contains('active'));
-      State.sound = isOn ? 'on' : 'off';
+      const isOn = !(soundToggle && soundToggle.classList.contains("active"));
+      State.sound = isOn ? "on" : "off";
       syncToggle(soundToggle, isOn);
       if (soundStatus) {
-        soundStatus.textContent = isOn ? 'Sound Effects: On' : 'Sound Effects: Off';
+        soundStatus.textContent = isOn
+          ? "Sound Effects: On"
+          : "Sound Effects: Off";
       }
       flashToggle(soundToggle, soundStatus);
     }
 
     function onToggleKeydown(handler) {
       return (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           handler();
         }
@@ -1907,18 +1956,21 @@
     }
 
     if (themeToggle) {
-      themeToggle.addEventListener('click', toggleThemeUI);
-      themeToggle.addEventListener('keydown', onToggleKeydown(toggleThemeUI));
+      themeToggle.addEventListener("click", toggleThemeUI);
+      themeToggle.addEventListener("keydown", onToggleKeydown(toggleThemeUI));
     }
 
     if (notificationToggle) {
-      notificationToggle.addEventListener('click', toggleNotification);
-      notificationToggle.addEventListener('keydown', onToggleKeydown(toggleNotification));
+      notificationToggle.addEventListener("click", toggleNotification);
+      notificationToggle.addEventListener(
+        "keydown",
+        onToggleKeydown(toggleNotification),
+      );
     }
 
     if (soundToggle) {
-      soundToggle.addEventListener('click', toggleSound);
-      soundToggle.addEventListener('keydown', onToggleKeydown(toggleSound));
+      soundToggle.addEventListener("click", toggleSound);
+      soundToggle.addEventListener("keydown", onToggleKeydown(toggleSound));
     }
 
     loadTheme();
@@ -1934,131 +1986,120 @@
 
   const routeMap = {
     home: {
-      title: 'Welcome to FitTrack',
-      subtitle: 'Your personal fitness companion',
+      title: "Welcome to FitTrack",
+      subtitle: "Your personal fitness companion",
       template: homeContent,
       mount: mountHome,
-      documentTitle: 'FitTrack - Home Dashboard'
+      documentTitle: "FitTrack - Home Dashboard",
     },
     steps: {
-      title: 'Step Counter',
-      subtitle: 'Track your daily movement',
+      title: "Step Counter",
+      subtitle: "Track your daily movement",
       template: stepsContent,
       mount: mountSteps,
-      documentTitle: 'FitTrack - Step Counter'
+      documentTitle: "FitTrack - Step Counter",
     },
     weekly: {
-      title: 'Weekly Summary',
-      subtitle: 'Your weekly step progress',
+      title: "Weekly Summary",
+      subtitle: "Your weekly step progress",
       template: weeklyContent,
       mount: mountWeekly,
-      documentTitle: 'FitTrack - Weekly Summary'
+      documentTitle: "FitTrack - Weekly Summary",
     },
     water: {
-      title: 'Water Intake Tracker',
-      subtitle: 'Stay hydrated, stay healthy',
+      title: "Water Intake Tracker",
+      subtitle: "Stay hydrated, stay healthy",
       template: waterContent,
       mount: mountWater,
-      documentTitle: 'FitTrack - Water Tracker'
+      documentTitle: "FitTrack - Water Tracker",
     },
     quotes: {
-      title: 'Daily Motivation',
-      subtitle: 'Get inspired to reach your goals',
+      title: "Daily Motivation",
+      subtitle: "Get inspired to reach your goals",
       template: quotesContent,
       mount: mountQuotes,
-      documentTitle: 'FitTrack - Daily Motivation'
+      documentTitle: "FitTrack - Daily Motivation",
     },
     nutrition: {
-      title: 'Nutrition Guide',
-      subtitle: 'Fuel your body right',
+      title: "Nutrition Guide",
+      subtitle: "Fuel your body right",
       template: nutritionContent,
       mount: mountNutrition,
-      documentTitle: 'FitTrack - Nutrition Guide'
+      documentTitle: "FitTrack - Nutrition Guide",
     },
     profile: {
-      title: 'User Profile',
-      subtitle: 'Manage your fitness profile',
+      title: "User Profile",
+      subtitle: "Manage your fitness profile",
       template: profileContent,
       mount: mountProfile,
-      documentTitle: 'FitTrack - Profile'
+      documentTitle: "FitTrack - Profile",
     },
     progress: {
-      title: 'Progress Overview',
-      subtitle: 'Your fitness journey at a glance',
+      title: "Progress Overview",
+      subtitle: "Your fitness journey at a glance",
       template: progressContent,
       mount: mountProgress,
-      documentTitle: 'FitTrack - Progress Overview'
+      documentTitle: "FitTrack - Progress Overview",
     },
     distance: {
-      title: 'Distance Tracker',
-      subtitle: 'Track how far you have walked',
+      title: "Distance Tracker",
+      subtitle: "Track how far you have walked",
       template: distanceContent,
       mount: mountDistance,
-      documentTitle: 'FitTrack - Distance Tracker'
+      documentTitle: "FitTrack - Distance Tracker",
     },
     settings: {
-      title: 'Settings',
-      subtitle: 'Customize your app experience',
+      title: "Settings",
+      subtitle: "Customize your app experience",
       template: settingsContent,
       mount: mountSettings,
-      documentTitle: 'FitTrack - Settings'
+      documentTitle: "FitTrack - Settings",
     },
     about: {
-      title: 'About FitTrack',
-      subtitle: 'A small app built to keep the daily habits visible',
+      title: "About FitTrack",
+      subtitle: "A small app built to keep the daily habits visible",
       template: aboutContent,
       mount: mountAbout,
-      documentTitle: 'FitTrack - About'
-    }
+      documentTitle: "FitTrack - About",
+    },
   };
 
   let activeCleanup = null;
 
-  function mountServiceWorker() {
-    if (!('serviceWorker' in navigator)) {
-      return;
-    }
-
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('service-worker.js')
-        .catch((error) => {
-          console.error('Service worker registration failed:', error);
-        });
-    });
-  }
-
   function renderRoute(route) {
-    const resolvedRoute = routeMap[route] ? route : 'home';
+    const resolvedRoute = routeMap[route] ? route : "home";
     const definition = routeMap[resolvedRoute];
-    const appRoot = document.getElementById('app');
+    const appRoot = document.getElementById("app");
 
     if (!appRoot || !definition) {
       return resolvedRoute;
     }
 
-    if (typeof activeCleanup === 'function') {
+    if (typeof activeCleanup === "function") {
       activeCleanup();
       activeCleanup = null;
     }
 
     document.title = definition.documentTitle;
-    appRoot.innerHTML = shellMarkup(resolvedRoute, definition.title, definition.subtitle, definition.template());
+    appRoot.innerHTML = shellMarkup(
+      resolvedRoute,
+      definition.title,
+      definition.subtitle,
+      definition.template(),
+    );
 
-    const loadingOverlay = document.getElementById('appLoading');
+    const loadingOverlay = document.getElementById("appLoading");
     if (loadingOverlay) {
       loadingOverlay.remove();
     }
 
-    const mountRoot = appRoot.querySelector('.route-view') || appRoot;
+    const mountRoot = appRoot.querySelector(".route-view") || appRoot;
     activeCleanup = definition.mount(mountRoot) || null;
 
     return resolvedRoute;
   }
 
-  function bootstrap() {
-    mountServiceWorker();
-  }
+  function bootstrap() {}
 
   window.FitTrackApp = {
     renderRoute,
@@ -2068,7 +2109,7 @@
     getDashboardSummary,
     getWeeklyData,
     updateWeeklyRecord,
-    bootstrap
+    bootstrap,
   };
 
   bootstrap();

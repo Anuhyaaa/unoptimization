@@ -1,11 +1,23 @@
 (function () {
-  'use strict';
+  "use strict";
 
-  const ROUTES = new Set(['home', 'steps', 'weekly', 'water', 'quotes', 'nutrition', 'profile', 'progress', 'distance', 'settings', 'about']);
+  const ROUTES = new Set([
+    "home",
+    "steps",
+    "weekly",
+    "water",
+    "quotes",
+    "nutrition",
+    "profile",
+    "progress",
+    "distance",
+    "settings",
+    "about",
+  ]);
 
   function getRouteFromLocation() {
-    const route = window.location.hash.replace('#', '').trim();
-    return ROUTES.has(route) ? route : 'home';
+    const route = window.location.hash.replace("#", "").trim();
+    return ROUTES.has(route) ? route : "home";
   }
 
   function navigate(route, replaceState = false) {
@@ -13,27 +25,29 @@
       return;
     }
 
-    const resolvedRoute = ROUTES.has(route) ? route : 'home';
+    const resolvedRoute = ROUTES.has(route) ? route : "home";
     window.FitTrackApp.renderRoute(resolvedRoute);
 
     const nextUrl = `#${resolvedRoute}`;
     if (replaceState) {
-      history.replaceState({ route: resolvedRoute }, '', nextUrl);
+      history.replaceState({ route: resolvedRoute }, "", nextUrl);
       return;
     }
 
     if (window.location.hash !== nextUrl) {
-      history.pushState({ route: resolvedRoute }, '', nextUrl);
+      history.pushState({ route: resolvedRoute }, "", nextUrl);
     }
   }
 
   function handleClick(event) {
-    const target = event.target.closest('[data-nav], .nav-link');
+    const target = event.target.closest("[data-nav], .nav-link");
     if (!target) {
       return;
     }
 
-    const nextRoute = target.getAttribute('data-nav') || target.getAttribute('href')?.replace('#', '');
+    const nextRoute =
+      target.getAttribute("data-nav") ||
+      target.getAttribute("href")?.replace("#", "");
     if (!ROUTES.has(nextRoute)) {
       return;
     }
@@ -47,13 +61,13 @@
   }
 
   function initRouter() {
-    document.addEventListener('click', handleClick);
-    window.addEventListener('popstate', handlePopState);
+    document.addEventListener("click", handleClick);
+    window.addEventListener("popstate", handlePopState);
     navigate(getRouteFromLocation(), true);
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRouter);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initRouter);
   } else {
     initRouter();
   }
