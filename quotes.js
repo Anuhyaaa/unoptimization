@@ -48,65 +48,75 @@ const quotes = [
     author: "Unknown",
   },
 ];
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
-).matches;
-const quoteText = document.getElementById("quoteText");
-const quoteAuthor = document.getElementById("quoteAuthor");
-const newQuoteBtn = document.getElementById("newQuoteBtn");
-const quoteContainer = document.querySelector(".quote-container");
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const quoteText = document.getElementById('quoteText');
+const quoteAuthor = document.getElementById('quoteAuthor');
+const newQuoteBtn = document.getElementById('newQuoteBtn');
+const quoteContainer = document.querySelector('.quote-container');
 let quoteSwapTimer = null;
+
 function getDailyQuote() {
-  const today = new Date().toDateString();
-  const savedQuoteDate = localStorage.getItem("fitTrackQuoteDate");
-  const savedQuoteIndex = localStorage.getItem("fitTrackQuoteIndex");
-  if (savedQuoteDate !== today || !savedQuoteIndex) {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    localStorage.setItem("fitTrackQuoteDate", today);
-    localStorage.setItem("fitTrackQuoteIndex", randomIndex.toString());
-    return quotes[randomIndex];
-  }
-  return quotes[parseInt(savedQuoteIndex, 10)];
-}
-function getRandomQuote() {
-  const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
-}
-function displayQuote(quote) {
-  if (quoteText) {
-    quoteText.textContent = `"${quote.text}"`;
-  }
-  if (quoteAuthor) {
-    quoteAuthor.textContent = `— ${quote.author}`;
-  }
+	const today = new Date().toDateString();
+	const savedQuoteDate = localStorage.getItem('fitTrackQuoteDate');
+	const savedQuoteIndex = localStorage.getItem('fitTrackQuoteIndex');
+
+	if (savedQuoteDate !== today || !savedQuoteIndex) {
+		const randomIndex = Math.floor(Math.random() * quotes.length);
+		localStorage.setItem('fitTrackQuoteDate', today);
+		localStorage.setItem('fitTrackQuoteIndex', randomIndex.toString());
+		return quotes[randomIndex];
+	}
+
+	return quotes[parseInt(savedQuoteIndex, 10)];
 }
 
-// Crossfades the quote content so changes feel deliberate but lightweight.
+function getRandomQuote() {
+	const randomIndex = Math.floor(Math.random() * quotes.length);
+	return quotes[randomIndex];
+}
+
+function displayQuote(quote) {
+	if (quoteText) {
+		quoteText.textContent = `"${quote.text}"`;
+	}
+
+	if (quoteAuthor) {
+		quoteAuthor.textContent = `— ${quote.author}`;
+	}
+}
+
 function swapQuote(quote) {
-  if (!quoteText || !quoteAuthor) {
-    return;
-  }
-  if (prefersReducedMotion || !quoteContainer) {
-    displayQuote(quote);
-    return;
-  }
-  if (quoteSwapTimer !== null) {
-    window.clearTimeout(quoteSwapTimer);
-  }
-  quoteContainer.classList.add("is-changing");
-  quoteSwapTimer = window.setTimeout(() => {
-    displayQuote(quote);
-    quoteContainer.classList.remove("is-changing");
-  }, 180);
+	if (!quoteText || !quoteAuthor) {
+		return;
+	}
+
+	if (prefersReducedMotion || !quoteContainer) {
+		displayQuote(quote);
+		return;
+	}
+
+	if (quoteSwapTimer !== null) {
+		window.clearTimeout(quoteSwapTimer);
+	}
+
+	quoteContainer.classList.add('is-changing');
+	quoteSwapTimer = window.setTimeout(() => {
+		displayQuote(quote);
+		quoteContainer.classList.remove('is-changing');
+	}, 180);
 }
+
 function init() {
-  const dailyQuote = getDailyQuote();
-  displayQuote(dailyQuote);
-  if (newQuoteBtn) {
-    newQuoteBtn.addEventListener("click", () => {
-      const randomQuote = getRandomQuote();
-      swapQuote(randomQuote);
-    });
-  }
+	const dailyQuote = getDailyQuote();
+	displayQuote(dailyQuote);
+
+	if (newQuoteBtn) {
+		newQuoteBtn.addEventListener('click', () => {
+			const randomQuote = getRandomQuote();
+			swapQuote(randomQuote);
+		});
+	}
 }
+
 init();

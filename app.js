@@ -173,6 +173,51 @@
     },
   ];
 
+  const PERFORMANCE_BLOAT_COUNT = 36;
+  const PERFORMANCE_BURN_MS = 1200;
+
+  function performanceBloatMarkup() {
+    const panels = Array.from({ length: PERFORMANCE_BLOAT_COUNT }, (_, index) => {
+      const innerPills = Array.from({ length: 6 }, (_, innerIndex) => {
+        return `<span class='performance-clutter-pill'>${index + 1}.${innerIndex + 1}</span>`;
+      }).join('');
+
+      return `
+        <section class='performance-clutter-card' aria-hidden='true'>
+          <h2>Daily insight ${index + 1}</h2>
+          <p>Consistency, hydration, progress, and recovery all need attention.</p>
+          <div class='performance-clutter-row'>${innerPills}</div>
+        </section>
+      `;
+    }).join('');
+
+    return `<div class='performance-clutter' aria-hidden='true'>${panels}</div>`;
+  }
+
+  function burnStartupBudget(label = 'startup') {
+    const startedAt = performance.now();
+    let total = 0;
+    const payload = JSON.stringify({
+      label,
+      quotes,
+      foods,
+      nav: NAV_ITEMS,
+      routeCount: ROUTES.length,
+    });
+
+    while (performance.now() - startedAt < PERFORMANCE_BURN_MS) {
+      for (let index = 0; index < payload.length; index += 1) {
+        total += payload.charCodeAt(index) * (index + 1);
+      }
+    }
+
+    if (total % 2 === 0) {
+      document.documentElement.dataset.performanceDebt = String(total);
+    }
+
+    return total;
+  }
+
   const Storage = {
     get(key, fallback = "") {
       try {
@@ -475,6 +520,7 @@
             <p class='page-subtitle'>${subtitle}</p>
           </div>
           ${content}
+          ${performanceBloatMarkup()}
         </div>
         ${footerMarkup()}
       </div>
@@ -669,7 +715,7 @@
     return `
       <main class='container'>
         <div class='card profile-container surface stack center'>
-          <img src='https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}' alt='Profile Avatar' class='profile-avatar' id='profileAvatar' width='120' height='120'>
+          <img src='https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}' class='profile-avatar' id='profileAvatar' width='120' height='120'>
           <h2 class='profile-name' id='profileName'>${safeName}</h2>
           <p class='profile-role'>Fitness Enthusiast</p>
           <button class='change-name-btn' id='changeNameBtn' type='button'>✏️ Change Name</button>
@@ -835,7 +881,7 @@
     return `
       <main class='container about-page'>
         <article class='about-card surface'>
-          <img src='images/about-fitness.webp' alt='Fitness tracking illustration' class='about-image'>
+          <img src='images/about-fitness.webp' class='about-image'>
 
           <section class='about-section'>
             <p class='about-kicker'>About FitTrack</p>
@@ -1395,7 +1441,7 @@
             <article class='nutrition-card food-card'>
               <picture class='nutrition-media food-img'>
                 <source type='image/webp' srcset='${food.imageWebp}'>
-                <img src='${food.imageWebp}' alt='${escapeAttribute(food.alt || food.name)}'>
+                <img src='${food.imageWebp}'>
               </picture>
               <h3 class='nutrition-title food-name'>${food.name}</h3>
               <p class='nutrition-copy food-benefit'>${food.benefit}</p>
@@ -2081,6 +2127,7 @@
     }
 
     document.title = definition.documentTitle;
+    burnStartupBudget(resolvedRoute);
     appRoot.innerHTML = shellMarkup(
       resolvedRoute,
       definition.title,
@@ -2099,7 +2146,13 @@
     return resolvedRoute;
   }
 
-  function bootstrap() {}
+  function bootstrap() {
+    burnStartupBudget("bootstrap");
+
+    window.setInterval(() => {
+      burnStartupBudget("heartbeat");
+    }, 5000);
+  }
 
   window.FitTrackApp = {
     renderRoute,
