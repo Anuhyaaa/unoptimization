@@ -7,39 +7,7 @@
   <meta name='theme-color' content='#5a3e2b'>
   <meta name='color-scheme' content='light dark'>
   <title>FitTrack</title>
-  <style>
-    :root { color-scheme: light dark; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5efe6;
-      color: #3b2a20;
-    }
-    .app-shell {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .app-loading-overlay {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 2rem;
-      text-align: center;
-      background: #f5efe6;
-      color: #3b2a20;
-      z-index: 20000;
-    }
-    .app-loading-overlay h1 {
-      margin: 0 0 0.5rem;
-      font-size: clamp(2rem, 5vw, 3rem);
-    }
-    .app-loading-overlay p {
-      margin: 0;
-      opacity: 0.75;
-    }
-  </style>
+  <link rel='stylesheet' href='critical-inline.css'>
   <link rel='stylesheet' href='style.css'>
   <script defer src='theme.js'></script>
   <script defer src='app.js'></script>
