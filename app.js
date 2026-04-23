@@ -113,61 +113,61 @@
   const foods = [
     {
       name: "Oats",
-      imageWebp: "images/oats.webp",
+      imageJpeg: "images/oats.jpg",
       alt: "Bowl of nutritious oats",
       benefit: "Provides long-lasting energy.",
     },
     {
       name: "Eggs",
-      imageWebp: "images/eggs.webp",
+      imageJpeg: "images/eggs.jpg",
       alt: "Fresh eggs for protein",
       benefit: "High-quality protein for muscle building.",
     },
     {
       name: "Banana",
-      imageWebp: "images/banana.webp",
+      imageJpeg: "images/banana.jpg",
       alt: "Yellow bananas rich in potassium",
       benefit: "Quick energy and potassium source.",
     },
     {
       name: "Chicken Breast",
-      imageWebp: "images/chicken.webp",
+      imageJpeg: "images/chicken.jpg",
       alt: "Grilled chicken breast",
       benefit: "Lean protein for muscle recovery.",
     },
     {
       name: "Brown Rice",
-      imageWebp: "images/brown-rice.webp",
+      imageJpeg: "images/brown-rice.jpg",
       alt: "Bowl of brown rice",
       benefit: "Healthy carbs for sustained energy.",
     },
     {
       name: "Almonds",
-      imageWebp: "images/almonds.webp",
+      imageJpeg: "images/almonds.jpg",
       alt: "Almonds with healthy fats",
       benefit: "Healthy fats and vitamins.",
     },
     {
       name: "Greek Yogurt",
-      imageWebp: "images/greek-yogurt.webp",
+      imageJpeg: "images/greek-yogurt.jpg",
       alt: "Greek yogurt in a bowl",
       benefit: "High protein and gut-friendly.",
     },
     {
       name: "Spinach",
-      imageWebp: "images/spinach.webp",
+      imageJpeg: "images/spinach.jpg",
       alt: "Fresh green spinach leaves",
       benefit: "Rich in iron and antioxidants.",
     },
     {
       name: "Salmon",
-      imageWebp: "images/salmon.webp",
+      imageJpeg: "images/salmon.jpg",
       alt: "Fresh salmon fillet",
       benefit: "Omega-3 for heart health.",
     },
     {
       name: "Avocado",
-      imageWebp: "images/avocado.webp",
+      imageJpeg: "images/avocado.jpg",
       alt: "Sliced avocado",
       benefit: "Healthy fats for overall wellness.",
     },
@@ -881,7 +881,7 @@
     return `
       <main class='container about-page'>
         <article class='about-card surface'>
-          <img src='images/about-fitness.webp' class='about-image'>
+          <img src='images/about-fitness.jpg' class='about-image'>
 
           <section class='about-section'>
             <p class='about-kicker'>About FitTrack</p>
@@ -1440,8 +1440,7 @@
           (food) => `
             <article class='nutrition-card food-card'>
               <picture class='nutrition-media food-img'>
-                <source type='image/webp' srcset='${food.imageWebp}'>
-                <img src='${food.imageWebp}'>
+                <img src='${food.imageJpeg}'>
               </picture>
               <h3 class='nutrition-title food-name'>${food.name}</h3>
               <p class='nutrition-copy food-benefit'>${food.benefit}</p>
