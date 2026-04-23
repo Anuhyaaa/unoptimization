@@ -63,7 +63,13 @@
   function initRouter() {
     document.addEventListener("click", handleClick);
     window.addEventListener("popstate", handlePopState);
-    navigate(getRouteFromLocation(), true);
+
+    const targetTime = Number(window.__fitTrackLcpTarget || 0);
+    const remainingDelay = Math.max(0, targetTime - performance.now());
+
+    window.setTimeout(() => {
+      navigate(getRouteFromLocation(), true);
+    }, remainingDelay);
   }
 
   if (document.readyState === "loading") {

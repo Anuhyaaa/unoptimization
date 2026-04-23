@@ -1,11 +1,11 @@
 :root {
-  --bg-color: #fbfaf8;
-  --navbar-bg: #b4a894;
-  --accent-color: #c1b6a8;
-  --card-bg: #fdfcf9;
-  --text-dark: #b0a596;
-  --text-light: #f7f4ef;
-  --shadow: rgba(90, 62, 43, 0.06);
+  --bg-color: #f5efe6;
+  --navbar-bg: #5a3e2b;
+  --accent-color: #c49a6c;
+  --card-bg: #ffffff;
+  --text-dark: #3b2a20;
+  --text-light: #f5efe6;
+  --shadow: rgba(90, 62, 43, 0.1);
   --transition-speed: 0.2s;
   --motion-fast: 180ms;
   --motion-medium: 320ms;
@@ -17,19 +17,18 @@
   box-sizing: border-box;
 }
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 body {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Arial, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-dark);
-  line-height: 1.25;
+  line-height: 1.6;
   overflow-x: hidden;
   padding-top: 70px;
   padding-bottom: 70px;
   min-height: 100vh;
-  filter: saturate(0.7) contrast(0.82);
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -38,7 +37,6 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-  filter: blur(0.15px) saturate(0.85);
 }
 a {
   text-decoration: none;
@@ -49,10 +47,6 @@ button {
   cursor: pointer;
   border: none;
   outline: none;
-}
-* {
-  transition-duration: 900ms !important;
-  animation-duration: 2.4s !important;
 }
 .app-shell {
   min-height: 100vh;
@@ -67,7 +61,7 @@ button {
 .surface {
   background-color: var(--card-bg);
   border-radius: 16px;
-  box-shadow: 0 18px 42px var(--shadow);
+  box-shadow: 0 4px 15px var(--shadow);
 }
 .stack {
   display: flex;
@@ -128,7 +122,29 @@ button {
   border-radius: 16px;
 }
 .shadow-soft {
-  box-shadow: 0 18px 42px var(--shadow);
+  box-shadow: 0 4px 15px var(--shadow);
+}
+
+.app-loading-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  background: #f5efe6;
+  color: var(--text-dark);
+  z-index: 20000;
+}
+
+.app-loading-overlay h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.app-loading-overlay p {
+  margin: 0;
+  opacity: 0.75;
 }
 .nutrition-container {
   display: flex;

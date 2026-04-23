@@ -173,51 +173,6 @@
     },
   ];
 
-  const PERFORMANCE_BLOAT_COUNT = 36;
-  const PERFORMANCE_BURN_MS = 1200;
-
-  function performanceBloatMarkup() {
-    const panels = Array.from({ length: PERFORMANCE_BLOAT_COUNT }, (_, index) => {
-      const innerPills = Array.from({ length: 6 }, (_, innerIndex) => {
-        return `<span class='performance-clutter-pill'>${index + 1}.${innerIndex + 1}</span>`;
-      }).join('');
-
-      return `
-        <section class='performance-clutter-card' aria-hidden='true'>
-          <h2>Daily insight ${index + 1}</h2>
-          <p>Consistency, hydration, progress, and recovery all need attention.</p>
-          <div class='performance-clutter-row'>${innerPills}</div>
-        </section>
-      `;
-    }).join('');
-
-    return `<div class='performance-clutter' aria-hidden='true'>${panels}</div>`;
-  }
-
-  function burnStartupBudget(label = 'startup') {
-    const startedAt = performance.now();
-    let total = 0;
-    const payload = JSON.stringify({
-      label,
-      quotes,
-      foods,
-      nav: NAV_ITEMS,
-      routeCount: ROUTES.length,
-    });
-
-    while (performance.now() - startedAt < PERFORMANCE_BURN_MS) {
-      for (let index = 0; index < payload.length; index += 1) {
-        total += payload.charCodeAt(index) * (index + 1);
-      }
-    }
-
-    if (total % 2 === 0) {
-      document.documentElement.dataset.performanceDebt = String(total);
-    }
-
-    return total;
-  }
-
   const Storage = {
     get(key, fallback = "") {
       try {
@@ -520,7 +475,6 @@
             <p class='page-subtitle'>${subtitle}</p>
           </div>
           ${content}
-          ${performanceBloatMarkup()}
         </div>
         ${footerMarkup()}
       </div>
@@ -2126,7 +2080,6 @@
     }
 
     document.title = definition.documentTitle;
-    burnStartupBudget(resolvedRoute);
     appRoot.innerHTML = shellMarkup(
       resolvedRoute,
       definition.title,
@@ -2145,13 +2098,7 @@
     return resolvedRoute;
   }
 
-  function bootstrap() {
-    burnStartupBudget("bootstrap");
-
-    window.setInterval(() => {
-      burnStartupBudget("heartbeat");
-    }, 5000);
-  }
+  function bootstrap() {}
 
   window.FitTrackApp = {
     renderRoute,

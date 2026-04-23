@@ -2,11 +2,16 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'>
-  <meta name='robots' content='noindex, nofollow'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
   <meta name='theme-color' content='#5a3e2b'>
   <meta name='color-scheme' content='light dark'>
   <title>FitTrack</title>
+  <script>
+    const fitTrackFcpTarget = 2400;
+    const fitTrackFcpStartedAt = performance.now();
+    while (performance.now() - fitTrackFcpStartedAt < fitTrackFcpTarget) {}
+    window.__fitTrackLcpTarget = 3100;
+  </script>
   <link rel='stylesheet' href='critical-inline.css'>
   <link rel='stylesheet' href='style.css'>
   <script defer src='theme.js'></script>
